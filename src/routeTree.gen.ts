@@ -18,6 +18,7 @@ import { Route as rootRoute } from './routes/__root'
 
 const IndexLazyImport = createFileRoute('/')()
 const ProfileIndexLazyImport = createFileRoute('/profile/')()
+const AdminIndexLazyImport = createFileRoute('/admin/')()
 
 // Create/Update Routes
 
@@ -33,6 +34,12 @@ const ProfileIndexLazyRoute = ProfileIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/profile/index.lazy').then((d) => d.Route))
 
+const AdminIndexLazyRoute = AdminIndexLazyImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/admin/index.lazy').then((d) => d.Route))
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -42,6 +49,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/profile/': {
@@ -58,36 +72,41 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
+  '/admin': typeof AdminIndexLazyRoute
   '/profile': typeof ProfileIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '/admin': typeof AdminIndexLazyRoute
   '/profile': typeof ProfileIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
+  '/admin/': typeof AdminIndexLazyRoute
   '/profile/': typeof ProfileIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/profile'
+  fullPaths: '/' | '/admin' | '/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile'
-  id: '__root__' | '/' | '/profile/'
+  to: '/' | '/admin' | '/profile'
+  id: '__root__' | '/' | '/admin/' | '/profile/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  AdminIndexLazyRoute: typeof AdminIndexLazyRoute
   ProfileIndexLazyRoute: typeof ProfileIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  AdminIndexLazyRoute: AdminIndexLazyRoute,
   ProfileIndexLazyRoute: ProfileIndexLazyRoute,
 }
 
@@ -102,11 +121,15 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/admin/",
         "/profile/"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/admin/": {
+      "filePath": "admin/index.lazy.tsx"
     },
     "/profile/": {
       "filePath": "profile/index.lazy.tsx"
