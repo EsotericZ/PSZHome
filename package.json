@@ -11,14 +11,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.4",
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
+    "@mui/icons-material": "^6.1.9",
+    "@mui/material": "^6.1.9",
     "@tanstack/react-router": "^1.46.4",
+    "axios": "^1.7.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@tanstack/router-devtools": "^1.46.5",
     "@tanstack/router-plugin": "^1.45.13",
-    "@types/react": "^18.3.3",
+    "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
     "@typescript-eslint/parser": "^7.15.0",
