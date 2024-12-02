@@ -2,33 +2,16 @@ import { FC, useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Button } from '@mui/material';
 
-import createUser from '../services/portal/createUser';
 import loginUser from '../services/portal/loginUser';
 
 const AuthButtons: FC = () => {
-  const { loginWithRedirect, logout, isAuthenticated, user, isLoading } = useAuth0();
+  const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
   const [validated, setValidated] = useState(false);
-
-  useEffect(() => {
-    console.log('Auth0 State Changed:');
-    console.log('isAuthenticated:', isAuthenticated);
-    console.log('user:', user);
-  }, [isAuthenticated, user]);
 
   const handleLogin = async () => {
     loginWithRedirect({
       authorizationParams: {
         screen_hint: 'login',
-        state: 'login',
-      },
-    });
-  };
-
-  const handleSignUp = async () => {
-    loginWithRedirect({
-      authorizationParams: {
-        screen_hint: 'signup',
-        state: 'signup',
       },
     });
   };
@@ -38,6 +21,10 @@ const AuthButtons: FC = () => {
       if (isAuthenticated && user) {
         console.log('Calling loginUser function...');
         try {
+          if (!user.email) {
+            throw new Error('Email is required');
+          }
+          
           const response = await loginUser({ email: user.email });
           console.log('Response from loginUser:', response);
 
@@ -67,10 +54,9 @@ const AuthButtons: FC = () => {
       {!isAuthenticated ? (
         <>
           <Button onClick={handleLogin}>Log In</Button>
-          <Button onClick={handleSignUp}>Sign Up</Button>
         </>
       ) : (
-      validated && user && (
+        validated && user && (
         <>
           <Button onClick={handleLogout}>Log Out</Button>
             <div>
