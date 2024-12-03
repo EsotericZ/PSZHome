@@ -1,70 +1,61 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Button } from '@mui/material';
-
+import { useUserContext } from '../context/UserContext';
 import loginUser from '../services/portal/loginUser';
 
 const AuthButtons: FC = () => {
-  const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
-  const [validated, setValidated] = useState(false);
-
-  const handleLogin = async () => {
-    loginWithRedirect({
-      authorizationParams: {
-        screen_hint: 'login',
-      },
-    });
-  };
+  const { loginWithRedirect, logout, isAuthenticated, user, isLoading } = useAuth0();
+  const { setEmail, setPsn, setRole, setVerified, setPsnAvatar, setPsnPlus } = useUserContext();
 
   useEffect(() => {
     const syncUserWithBackend = async () => {
-      if (isAuthenticated && user) {
-        console.log('Calling loginUser function...');
+      if (isAuthenticated && user?.email) {
+        setEmail(user.email);
+
         try {
-          if (!user.email) {
-            throw new Error('Email is required');
-          }
-          
-          const response = await loginUser({ email: user.email });
-          console.log('Response from loginUser:', response);
+          const response = await loginUser(user.email);
+          console.log(`User Data: ${response}`)
 
-          if (response.status === 'not_found') {
-            console.error('User not found in database. Logging out...');
-            await logout({ logoutParams: { returnTo: window.location.origin } });
-          } else {
-            console.log('User logged in successfully:', response.user);
-            setValidated(true);
-          }
+          setPsn(response.psn || null);
+          setPsn(response.role || 2001);
+          setPsn(response.verified || false);
+          setPsnAvatar(response.psnAvatar || null);
+          setPsnPlus(response.psnPlus || false);
         } catch (error) {
-          console.error('Error in loginUser function:', error);
-        } finally {
+          console.error(`Error fetching user: ${error}`)
         }
-      }
-    };
+      };
+    }
 
-    syncUserWithBackend();
-  }, [isAuthenticated, user]);
+    if (!isLoading) {
+      syncUserWithBackend();
+    }
+  }, [isAuthenticated, user, setEmail, setPsn, setRole, setVerified, setPsnAvatar, setPsnPlus]);
+
+  const handleLogin = () => {
+    loginWithRedirect();
+  };
 
   const handleLogout = () => {
     logout({ logoutParams: { returnTo: window.location.origin } });
+    setEmail(null);
+    setPsn(null);
+    setRole(2001);
+    setVerified(false);
+    setPsnAvatar(null);
+    setPsnPlus(false);
   };
 
   return (
     <div>
       {!isAuthenticated ? (
-        <>
-          <Button onClick={handleLogin}>Log In</Button>
-        </>
+        <Button onClick={handleLogin}>Log In</Button>
       ) : (
-        validated && user && (
         <>
           <Button onClick={handleLogout}>Log Out</Button>
-            <div>
-              <p>Welcome {user.name}</p>
-              <p>Email {user.email}</p>
-            </div>
-          </>
-        )
+          <p>Welcome {user?.email}</p>
+        </>
       )}
     </div>
   );
