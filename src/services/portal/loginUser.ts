@@ -1,9 +1,21 @@
 import api from '../../api/api';
 import UserProps from '../../types/UserTypes';
 
-const loginUser = async (email: string): Promise<UserProps> => {
-  const res = await api.post('/portal', { email });
-  return res.data as UserProps;
+interface LoginResponse {
+  user: UserProps;
+  token: string;
+}
+
+const loginUser = async (email: string, token: string): Promise<LoginResponse> => {
+  const res = await api.post('/portal', 
+    { email },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    }
+  );
+  return res.data;
 };
 
 export default loginUser;

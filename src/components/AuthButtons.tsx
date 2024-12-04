@@ -5,7 +5,7 @@ import { useUserContext } from '../context/UserContext';
 import loginUser from '../services/portal/loginUser';
 
 const AuthButtons: FC = () => {
-  const { loginWithRedirect, logout, isAuthenticated, user, isLoading } = useAuth0();
+  const { loginWithRedirect, logout, isAuthenticated, user, isLoading, getAccessTokenSilently } = useAuth0();
   const { setEmail, setPsn, setRole, setVerified, setPsnAvatar, setPsnPlus } = useUserContext();
 
   useEffect(() => {
@@ -14,15 +14,19 @@ const AuthButtons: FC = () => {
         setEmail(user.email);
 
         try {
-          const response = await loginUser(user.email);
-          console.log(`User Data: ${JSON.stringify(response, null, 2)}`);
-          console.log(response.role)
+          const token = await getAccessTokenSilently();
+          const response = await loginUser(user.email, token);
+          const { token: jwtToken, user: userData } = response;
+          localStorage.setItem('jwtToken', jwtToken);
 
-          setPsn(response.psn || null);
-          setRole(response.role || 2001);
-          setVerified(response.verified || false);
-          setPsnAvatar(response.psnAvatar || null);
-          setPsnPlus(response.psnPlus || false);
+          console.log(`User Data: ${JSON.stringify(response, null, 2)}`);
+          console.log(userData.role)
+
+          setPsn(userData.psn || null);
+          setRole(userData.role || 2001);
+          setVerified(userData.verified || false);
+          setPsnAvatar(userData.psnAvatar || null);
+          setPsnPlus(userData.psnPlus || false);
         } catch (error) {
           console.error(`Error fetching user: ${error}`)
         }
@@ -40,6 +44,7 @@ const AuthButtons: FC = () => {
 
   const handleLogout = () => {
     logout({ logoutParams: { returnTo: window.location.origin } });
+    localStorage.removeItem('jwtToken');
     setEmail(null);
     setPsn(null);
     setRole(2001);

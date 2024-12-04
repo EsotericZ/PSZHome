@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { Auth0Provider } from '@auth0/auth0-react';
+import { Auth0Provider, CacheLocation } from '@auth0/auth0-react';
 import { UserProvider } from './context/UserContext';
 import App from './App';
 
@@ -16,7 +16,8 @@ const providerConfig = {
   clientId: clientId,
   authorizationParams: {
     redirect_uri: window.location.origin,
-  }
+  },
+  cacheLocation: 'localstorage' as CacheLocation,
 }
 
 const rootElement = document.getElementById('root')!;
