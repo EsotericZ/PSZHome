@@ -15,11 +15,12 @@ const AuthButtons: FC = () => {
 
         try {
           const response = await loginUser(user.email);
-          console.log(`User Data: ${response}`)
+          console.log(`User Data: ${JSON.stringify(response, null, 2)}`);
+          console.log(response.role)
 
           setPsn(response.psn || null);
-          setPsn(response.role || 2001);
-          setPsn(response.verified || false);
+          setRole(response.role || 2001);
+          setVerified(response.verified || false);
           setPsnAvatar(response.psnAvatar || null);
           setPsnPlus(response.psnPlus || false);
         } catch (error) {

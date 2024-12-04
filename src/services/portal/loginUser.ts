@@ -1,9 +1,9 @@
 import api from '../../api/api';
+import UserProps from '../../types/UserTypes';
 
-const loginUser = async (email: string) => {
-  console.log('loginUser called with:', email);
-  // const res = await api.put('/portal', { email });
-  // return res.data;
+const loginUser = async (email: string): Promise<UserProps> => {
+  const res = await api.post('/portal', { email });
+  return res.data as UserProps;
 };
 
 export default loginUser;

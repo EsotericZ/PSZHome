@@ -11,22 +11,24 @@ if (!domain || !clientId) {
   throw new Error('Auth0 domain and clientId are required in the environment variables');
 }
 
+const providerConfig = {
+  domain: domain,
+  clientId: clientId,
+  authorizationParams: {
+    redirect_uri: window.location.origin,
+  }
+}
+
 const rootElement = document.getElementById('root')!;
 if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
-    <StrictMode>
-        <Auth0Provider
-          domain={domain}
-          clientId={clientId}
-          authorizationParams={{
-            redirect_uri: window.location.origin,
-          }}
-        >
-          <UserProvider>
-            <App />
-          </UserProvider>
-        </Auth0Provider>
-    </StrictMode>
+    <Auth0Provider {...providerConfig}>
+      <StrictMode>
+        <UserProvider>
+          <App />
+        </UserProvider>
+      </StrictMode>
+    </Auth0Provider>
   );
 }
