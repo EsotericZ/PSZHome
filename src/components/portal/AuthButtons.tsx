@@ -1,8 +1,8 @@
 import { FC, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Button } from '@mui/material';
-import { useUserContext } from '../context/UserContext';
-import loginUser from '../services/portal/loginUser';
+import { useUserContext } from '../../context/UserContext';
+import loginUser from '../../services/portal/loginUser';
 
 const AuthButtons: FC = () => {
   const { loginWithRedirect, logout, isAuthenticated, user, isLoading, getAccessTokenSilently } = useAuth0();
