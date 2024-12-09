@@ -1,5 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react';
+import { Box } from '@mui/material';
 
 import UserProps from '../../types/UserTypes';
 
@@ -31,7 +32,7 @@ function Admin() {
   }, []);
 
   return (
-    <>
+    <Box>
       <h3>Admin</h3>
       {loading ? (
         <p>Loading</p>
@@ -42,6 +43,6 @@ function Admin() {
           ))}
         </div>
       )}
-    </>
+    </Box>
   )
 }

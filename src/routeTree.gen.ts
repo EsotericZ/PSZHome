@@ -17,7 +17,10 @@ import { Route as rootRoute } from './routes/__root'
 // Create Virtual Routes
 
 const IndexLazyImport = createFileRoute('/')()
+const TopRatedIndexLazyImport = createFileRoute('/topRated/')()
 const ProfileIndexLazyImport = createFileRoute('/profile/')()
+const LibraryIndexLazyImport = createFileRoute('/library/')()
+const GamesIndexLazyImport = createFileRoute('/games/')()
 const AdminIndexLazyImport = createFileRoute('/admin/')()
 
 // Create/Update Routes
@@ -28,11 +31,31 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
+const TopRatedIndexLazyRoute = TopRatedIndexLazyImport.update({
+  id: '/topRated/',
+  path: '/topRated/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/topRated/index.lazy').then((d) => d.Route),
+)
+
 const ProfileIndexLazyRoute = ProfileIndexLazyImport.update({
   id: '/profile/',
   path: '/profile/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/profile/index.lazy').then((d) => d.Route))
+
+const LibraryIndexLazyRoute = LibraryIndexLazyImport.update({
+  id: '/library/',
+  path: '/library/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/library/index.lazy').then((d) => d.Route))
+
+const GamesIndexLazyRoute = GamesIndexLazyImport.update({
+  id: '/games/',
+  path: '/games/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/games/index.lazy').then((d) => d.Route))
 
 const AdminIndexLazyRoute = AdminIndexLazyImport.update({
   id: '/admin/',
@@ -58,11 +81,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/games/': {
+      id: '/games/'
+      path: '/games'
+      fullPath: '/games'
+      preLoaderRoute: typeof GamesIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/library/': {
+      id: '/library/'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/profile/': {
       id: '/profile/'
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/topRated/': {
+      id: '/topRated/'
+      path: '/topRated'
+      fullPath: '/topRated'
+      preLoaderRoute: typeof TopRatedIndexLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -73,41 +117,63 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/admin': typeof AdminIndexLazyRoute
+  '/games': typeof GamesIndexLazyRoute
+  '/library': typeof LibraryIndexLazyRoute
   '/profile': typeof ProfileIndexLazyRoute
+  '/topRated': typeof TopRatedIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/admin': typeof AdminIndexLazyRoute
+  '/games': typeof GamesIndexLazyRoute
+  '/library': typeof LibraryIndexLazyRoute
   '/profile': typeof ProfileIndexLazyRoute
+  '/topRated': typeof TopRatedIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/admin/': typeof AdminIndexLazyRoute
+  '/games/': typeof GamesIndexLazyRoute
+  '/library/': typeof LibraryIndexLazyRoute
   '/profile/': typeof ProfileIndexLazyRoute
+  '/topRated/': typeof TopRatedIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/profile'
+  fullPaths: '/' | '/admin' | '/games' | '/library' | '/profile' | '/topRated'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/profile'
-  id: '__root__' | '/' | '/admin/' | '/profile/'
+  to: '/' | '/admin' | '/games' | '/library' | '/profile' | '/topRated'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin/'
+    | '/games/'
+    | '/library/'
+    | '/profile/'
+    | '/topRated/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AdminIndexLazyRoute: typeof AdminIndexLazyRoute
+  GamesIndexLazyRoute: typeof GamesIndexLazyRoute
+  LibraryIndexLazyRoute: typeof LibraryIndexLazyRoute
   ProfileIndexLazyRoute: typeof ProfileIndexLazyRoute
+  TopRatedIndexLazyRoute: typeof TopRatedIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AdminIndexLazyRoute: AdminIndexLazyRoute,
+  GamesIndexLazyRoute: GamesIndexLazyRoute,
+  LibraryIndexLazyRoute: LibraryIndexLazyRoute,
   ProfileIndexLazyRoute: ProfileIndexLazyRoute,
+  TopRatedIndexLazyRoute: TopRatedIndexLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -122,7 +188,10 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/admin/",
-        "/profile/"
+        "/games/",
+        "/library/",
+        "/profile/",
+        "/topRated/"
       ]
     },
     "/": {
@@ -131,8 +200,17 @@ export const routeTree = rootRoute
     "/admin/": {
       "filePath": "admin/index.lazy.tsx"
     },
+    "/games/": {
+      "filePath": "games/index.lazy.tsx"
+    },
+    "/library/": {
+      "filePath": "library/index.lazy.tsx"
+    },
     "/profile/": {
       "filePath": "profile/index.lazy.tsx"
+    },
+    "/topRated/": {
+      "filePath": "topRated/index.lazy.tsx"
     }
   }
 }
