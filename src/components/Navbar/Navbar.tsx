@@ -4,7 +4,7 @@ import { Link } from '@tanstack/react-router';
 import ChangeHistoryIcon from '@mui/icons-material/ChangeHistory';
 import CloseIcon from '@mui/icons-material/Close';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
-// import GamesIcon from '@mui/icons-material/Games';
+import GamesIcon from '@mui/icons-material/Games';
 import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
 
 import { CircleMenu, CircleMenuItem } from 'react-circular-menu';
@@ -42,6 +42,14 @@ const Navbar = () => {
           rotationAngle={270} 
           itemSize={2} 
           radius={5}
+          onMenuToggle={isMenuOpen ? handleMenuItemClick : undefined}
+          menuToggleElement={
+            isMenuOpen ? (
+              <GamesIcon sx={{ fontSize: 34, color: '#000' }} />
+            ) : (
+              <ChangeHistoryIcon sx={{ fontSize: 34, color: '#0BC904' }} />
+            )
+          }
         >
           <CircleMenuItem tooltip='Home'>
             <Box
