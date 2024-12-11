@@ -9,7 +9,6 @@ function Games() {
   return (
     <Box>
       <h3>Games</h3>
-      <p>do it</p>
     </Box>
   )
 }
