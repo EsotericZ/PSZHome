@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { Auth0Provider, CacheLocation } from '@auth0/auth0-react';
+import { Auth0Provider, Auth0ProviderOptions, CacheLocation } from '@auth0/auth0-react';
 import { UserProvider } from './context/UserContext';
 import App from './App';
 
@@ -11,7 +11,7 @@ if (!domain || !clientId) {
   throw new Error('Auth0 domain and clientId are required in the environment variables');
 }
 
-const providerConfig = {
+const providerConfig: Auth0ProviderOptions = {
   domain: domain,
   clientId: clientId,
   authorizationParams: {
