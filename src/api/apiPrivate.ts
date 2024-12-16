@@ -7,4 +7,15 @@ const apiPrivate = axios.create({
   withCredentials: true,
 });
 
+apiPrivate.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('pszToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 export default apiPrivate;

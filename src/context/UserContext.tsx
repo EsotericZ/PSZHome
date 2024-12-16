@@ -1,45 +1,67 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, Dispatch, ReactNode, useContext, useEffect, useReducer } from 'react';
 
-interface UserContextProps {
+interface UserState {
   email: string | null;
-  setEmail: (email: string | null) => void;
   psn: string | null;
-  setPsn: (psn: string | null) => void;
   role: number;
-  setRole: (role: number) => void;
   verified: boolean;
-  setVerified: (verified: boolean) => void;
   psnAvatar: string | null;
-  setPsnAvatar: (psnAvatar: string | null) => void;
   psnPlus: boolean;
-  setPsnPlus: (psnPlus: boolean) => void;
-}
+};
 
-const UserContext = createContext<UserContextProps | undefined>(undefined);
+const initialState = {
+  email: null,
+  psn: null,
+  role: 0,
+  verified: false,
+  psnAvatar: null,
+  psnPlus: false,
+};
+
+type UserAction =
+  | { type: 'SET_USER'; payload: Partial<UserState> }
+  | { type: 'RESET_USER' };
+
+const userReducer = (state: UserState, action: UserAction): UserState => {
+  switch (action.type) {
+    case 'SET_USER':
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case 'RESET_USER':
+      return {
+        ...state,
+        email: null,
+        psn: null,
+        role: 0,
+        verified: false,
+        psnAvatar: null,
+        psnPlus: false,
+      };
+    default:
+      return state;
+  }
+};
+
+const UserContext = createContext<{
+  state: UserState;
+  dispatch: Dispatch<UserAction>;
+} | null>(null);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [email, setEmail] = useState<string | null>(null);
-  const [psn, setPsn] = useState<string | null>(null);
-  const [role, setRole] = useState<number>(2001);
-  const [verified, setVerified] = useState<boolean>(false);
-  const [psnAvatar, setPsnAvatar] = useState<string | null>(null);
-  const [psnPlus, setPsnPlus] = useState<boolean>(false);
+  const persistedState = localStorage.getItem('userState');
+  const [state, dispatch] = useReducer(
+    userReducer,
+    persistedState ? JSON.parse(persistedState) : initialState
+  );
+
+  useEffect(() => {
+    localStorage.setItem('userState', JSON.stringify(state));
+  }, [state]);
 
   return (
-    <UserContext.Provider value={{ 
-      email, 
-      setEmail,
-      psn,
-      setPsn,
-      role,
-      setRole,
-      verified,
-      setVerified,
-      psnAvatar,
-      setPsnAvatar,
-      psnPlus,
-      setPsnPlus,
-    }}>
+    <UserContext.Provider value={{ state, dispatch }}>
       {children}
     </UserContext.Provider>
   );

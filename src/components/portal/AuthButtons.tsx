@@ -2,31 +2,36 @@ import { FC, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Button } from '@mui/material';
 import { useUserContext } from '../../context/UserContext';
+
 import loginUser from '../../services/portal/loginUser';
 
 const AuthButtons: FC = () => {
   const { loginWithRedirect, logout, isAuthenticated, user, isLoading, getAccessTokenSilently } = useAuth0();
-  const { setEmail, setPsn, setRole, setVerified, setPsnAvatar, setPsnPlus } = useUserContext();
+  const { dispatch } = useUserContext();
 
   useEffect(() => {
     const syncUserWithBackend = async () => {
       if (isAuthenticated && user?.email) {
-        setEmail(user.email);
-
         try {
           const token = await getAccessTokenSilently();
           const response = await loginUser(user.email, token);
-          const { token: jwtToken, user: userData } = response;
-          localStorage.setItem('jwtToken', jwtToken);
+          const { token: pszToken, user: userData } = response;
+          localStorage.setItem('pszToken', pszToken);
 
           console.log(`User Data: ${JSON.stringify(response, null, 2)}`);
           console.log(userData.role)
 
-          setPsn(userData.psn || null);
-          setRole(userData.role || 2001);
-          setVerified(userData.verified || false);
-          setPsnAvatar(userData.psnAvatar || null);
-          setPsnPlus(userData.psnPlus || false);
+          dispatch({
+            type: 'SET_USER',
+            payload: {
+              email: user.email,
+              psn: userData.psn,
+              role: userData.role,
+              verified: userData.verified,
+              psnAvatar: userData.psnAvatar,
+              psnPlus: userData.psnPlus,
+            },
+          });
         } catch (error) {
           console.error(`Error fetching user: ${error}`)
         }
@@ -36,7 +41,7 @@ const AuthButtons: FC = () => {
     if (!isLoading) {
       syncUserWithBackend();
     }
-  }, [isAuthenticated, user, setEmail, setPsn, setRole, setVerified, setPsnAvatar, setPsnPlus]);
+  }, [isAuthenticated, user, getAccessTokenSilently, dispatch, isLoading]);
 
   const handleLogin = () => {
     loginWithRedirect();
@@ -44,13 +49,9 @@ const AuthButtons: FC = () => {
 
   const handleLogout = () => {
     logout({ logoutParams: { returnTo: window.location.origin } });
-    localStorage.removeItem('jwtToken');
-    setEmail(null);
-    setPsn(null);
-    setRole(2001);
-    setVerified(false);
-    setPsnAvatar(null);
-    setPsnPlus(false);
+    localStorage.removeItem('pszToken');
+    localStorage.removeItem('userState');
+    dispatch({ type: 'RESET_USER' });
   };
 
   return (

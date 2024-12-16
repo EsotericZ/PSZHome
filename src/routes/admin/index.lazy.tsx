@@ -2,10 +2,10 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import UserProps from '../../types/UserTypes';
 
 import getAllUsers from '../../services/admin/getAllUsers'
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 export const Route = createLazyFileRoute('/admin/')({
   component: Admin,

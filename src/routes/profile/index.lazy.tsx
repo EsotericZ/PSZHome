@@ -8,15 +8,15 @@ export const Route = createLazyFileRoute('/profile/')({
 });
 
 function Profile() {
-  const { email, psn, role, verified } = useUserContext();
+  const { state } = useUserContext();
 
   return (
     <Box>
       <h3>Profile</h3>
-      <p>Email: {email}</p>
-      <p>PSN: {psn}</p>
-      <p>Role: {role}</p>
-      <p>Verified: {verified}</p>
+      <p>Email: {state.email}</p>
+      <p>PSN: {state.psn}</p>
+      <p>Role: {state.role}</p>
+      <p>Verified: {state.verified}</p>
     </Box>
   );
 }

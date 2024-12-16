@@ -1,7 +1,7 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { Box } from '@mui/material';
 
-import Navbar from '../components/Navbar/Navbar';
+import Navbar from '../components/navbar/Navbar';
 import useSyncUserWithBackend from '../hooks/useSyncUserWithBackend';
 
 export const Route = createRootRoute({

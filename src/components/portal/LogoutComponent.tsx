@@ -5,17 +5,13 @@ import { ListItemButton, ListItemText } from '@mui/material';
 
 const LogoutComponent: FC = () => {
   const { logout } = useAuth0();
-  const { setEmail, setPsn, setRole, setVerified, setPsnAvatar, setPsnPlus } = useUserContext();
+  const { dispatch } = useUserContext();
 
   const handleLogout = () => {
     logout({ logoutParams: { returnTo: window.location.origin } });
-    localStorage.removeItem('jwtToken');
-    setEmail(null);
-    setPsn(null);
-    setRole(2001);
-    setVerified(false);
-    setPsnAvatar(null);
-    setPsnPlus(false);
+    localStorage.removeItem('pszToken');
+    localStorage.removeItem('userState');
+    dispatch({ type: 'RESET_USER' });
   };
 
   return (
