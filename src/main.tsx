@@ -1,6 +1,8 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Auth0Provider, Auth0ProviderOptions, CacheLocation } from '@auth0/auth0-react';
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider } from './context/ThemeContext';
 import { UserProvider } from './context/UserContext';
 import App from './App';
 
@@ -27,7 +29,10 @@ if (rootElement) {
     <Auth0Provider {...providerConfig}>
       <StrictMode>
         <UserProvider>
-          <App />
+          <ThemeProvider>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
         </UserProvider>
       </StrictMode>
     </Auth0Provider>
