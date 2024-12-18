@@ -2,7 +2,7 @@ import { createContext, FC, ReactNode } from 'react';
 import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 
 const darkTheme = {
-  background: "#151718",
+  background: "#1E1E1E",
   text: "#fff",
   iconActive: "#9BA1A6",
   iconInactive: "#2d2d2d",

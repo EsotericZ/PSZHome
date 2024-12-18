@@ -2,15 +2,17 @@ import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 
 import ChangeHistoryIcon from '@mui/icons-material/ChangeHistory';
-import CloseIcon from '@mui/icons-material/Close';
+// import CloseIcon from '@mui/icons-material/Close';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
 import GamesIcon from '@mui/icons-material/Games';
 import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
 
 import { CircleMenu, CircleMenuItem } from 'react-circular-menu';
-import { Box } from '@mui/material';
+import { Box, Backdrop } from '@mui/material';
 import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
+
+import LoginComponent from '../portal/LoginComponent';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,20 +21,38 @@ const Navbar = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
-  const handleMenuItemClick = () => {
+  const handleCloseMenu = () => {
     setIsMenuOpen(false);
   };
 
   return (
+    <>
+    <Backdrop
+      open={isMenuOpen}
+      onClick={handleCloseMenu}
+      sx={{
+        zIndex: 999, 
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        transition: 'opacity 0.3s ease',
+      }}
+    />
+
     <StyleSheetManager shouldForwardProp={isPropValid}>
       <Box
         sx={{
           position: 'fixed',
-          top: isMenuOpen ? '50%' : '10px',
-          left: isMenuOpen ? '50%' : '10px',
+          top: isMenuOpen ? '50%' : '16px',
+          left: isMenuOpen ? '50%' : '16px',
           transform: isMenuOpen ? 'translate(-50%, -50%)' : 'none',
           transition: 'all 0.5s ease-in-out',
           zIndex: 1000, 
+          width: 56,
+          height: 56,
+          borderRadius: '50%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#6A0DAD',
         }}
         onClick={!isMenuOpen ? toggleMenu : undefined}
       >
@@ -42,10 +62,10 @@ const Navbar = () => {
           rotationAngle={270} 
           itemSize={2} 
           radius={5}
-          onMenuToggle={isMenuOpen ? handleMenuItemClick : undefined}
+          onMenuToggle={isMenuOpen ? handleCloseMenu : undefined}
           menuToggleElement={
             isMenuOpen ? (
-              <GamesIcon sx={{ fontSize: 34, color: '#000' }} />
+              <GamesIcon sx={{ fontSize: 34, color: '#000',mt: 1 }} />
             ) : (
               <ChangeHistoryIcon sx={{ fontSize: 34, color: '#0BC904' }} />
             )
@@ -67,7 +87,7 @@ const Navbar = () => {
                 to={'/'}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleMenuItemClick();
+                  handleCloseMenu();
                 }}
                 sx={{
                   display: 'flex',
@@ -78,7 +98,7 @@ const Navbar = () => {
                   color: '#0BC904',
                 }}
               >
-                <ChangeHistoryIcon sx={{ fontSize: 34, marginTop: '-4px' }}/>
+                <ChangeHistoryIcon sx={{ fontSize: 34, mt: '-4px' }}/>
               </Box>
             </Box>
           </CircleMenuItem>
@@ -99,7 +119,7 @@ const Navbar = () => {
                 to={'/games'}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleMenuItemClick();
+                  handleCloseMenu();
                 }}
                 sx={{
                   display: 'flex',
@@ -127,11 +147,9 @@ const Navbar = () => {
               }}
             >
               <Box 
-                component={Link} 
-                to={'/'}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleMenuItemClick();
+                  handleCloseMenu();
                 }}
                 sx={{
                   display: 'flex',
@@ -139,10 +157,11 @@ const Navbar = () => {
                   alignItems: 'center',
                   height: '100%',
                   textDecoration: 'none',
-                  color: '#0091EA'
+                  color: '#0091EA',
+                  cursor: 'pointer',
                 }}
               >
-                <CloseIcon sx={{ fontSize: 34 }} />
+                <LoginComponent />
               </Box>
             </Box>
           </CircleMenuItem>
@@ -163,7 +182,7 @@ const Navbar = () => {
                 to={'/topRated'}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleMenuItemClick();
+                  handleCloseMenu();
                 }}
                 sx={{
                   display: 'flex',
@@ -181,6 +200,7 @@ const Navbar = () => {
         </CircleMenu>
       </Box>
     </StyleSheetManager>
+    </>
   );
 };
 
