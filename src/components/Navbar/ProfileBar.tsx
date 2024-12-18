@@ -1,16 +1,21 @@
 import { useState } from 'react';
+import { Link } from '@tanstack/react-router';
 import { Box, Backdrop, SpeedDial, SpeedDialAction } from '@mui/material';
 
-import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import PrintIcon from '@mui/icons-material/Print';
-import ShareIcon from '@mui/icons-material/Share';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import GamesIcon from '@mui/icons-material/Games';
+import LogoutIcon from '@mui/icons-material/Logout';
+import PersonIcon from '@mui/icons-material/Person';
+import SettingsIcon from '@mui/icons-material/Settings';
+
+import LogoutComponent from '../portal/LogoutComponent';
 
 const actions = [
-  { icon: <FileCopyIcon />, name: 'Copy' },
-  { icon: <SaveIcon />, name: 'Save' },
-  { icon: <PrintIcon />, name: 'Print' },
-  { icon: <ShareIcon />, name: 'Share' },
+  { icon: <PersonIcon />, name: 'Profile', link: '/profile' },
+  { icon: <GamesIcon />, name: 'Library', link: '/library' },
+  { icon: <AddShoppingCartIcon />, name: 'Wishlist', link: '/wishlist' },
+  { icon: <LogoutIcon />, name: 'Logout', link: null },
+  { icon: <SettingsIcon />, name: 'Admin', link: '/admin' },
 ];
 
 interface User {
@@ -26,6 +31,14 @@ const user: User = {
 const ProfileBar = () => {
   const [open, setOpen] = useState(false);
   const firstLetter = user.name.charAt(0).toUpperCase();
+
+  const handleActionClick = (action: typeof actions[number]) => {
+    if (action.name === 'Logout') {
+      LogoutComponent();
+    } else if (action.link) {
+      window.location.href = action.link;
+    }
+  };
 
   return (
     <Box
@@ -93,6 +106,11 @@ const ProfileBar = () => {
             key={action.name}
             icon={action.icon}
             tooltipTitle={action.name}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleActionClick(action);
+              setOpen(false);
+            }}
           />
         ))}
       </SpeedDial>

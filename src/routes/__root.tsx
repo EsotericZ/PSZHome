@@ -1,5 +1,6 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { Box } from '@mui/material';
+import { useAuth0 } from '@auth0/auth0-react';
 
 import Navbar from '../components/navbar/Navbar';
 import ProfileBar from '../components/navbar/ProfileBar';
@@ -11,11 +12,12 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   useSyncUserWithBackend();
+  const { isAuthenticated } = useAuth0();
 
   return (
     <Box sx={{ display: 'flex' }}>
       <Navbar />
-      <ProfileBar />
+      {isAuthenticated && <ProfileBar />}
       <Box
         sx={{
           display: 'flex',
