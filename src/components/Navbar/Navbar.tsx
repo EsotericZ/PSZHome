@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 
 import ChangeHistoryIcon from '@mui/icons-material/ChangeHistory';
-// import CloseIcon from '@mui/icons-material/Close';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
 import GamesIcon from '@mui/icons-material/Games';
 import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
@@ -52,7 +51,7 @@ const Navbar = () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: '#6A0DAD',
+          backgroundColor: (theme) => theme.palette.primary.main,
         }}
         onClick={!isMenuOpen ? toggleMenu : undefined}
       >

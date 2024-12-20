@@ -1,22 +1,14 @@
 import { useState } from 'react';
-import { Link } from '@tanstack/react-router';
-import { Box, Backdrop, SpeedDial, SpeedDialAction } from '@mui/material';
+import { Backdrop, Box, SpeedDial, SpeedDialAction } from '@mui/material';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useUserContext } from '../../context/UserContext';
+import { router } from '../../App';
 
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import GamesIcon from '@mui/icons-material/Games';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
-
-import LogoutComponent from '../portal/LogoutComponent';
-
-const actions = [
-  { icon: <PersonIcon />, name: 'Profile', link: '/profile' },
-  { icon: <GamesIcon />, name: 'Library', link: '/library' },
-  { icon: <AddShoppingCartIcon />, name: 'Wishlist', link: '/wishlist' },
-  { icon: <LogoutIcon />, name: 'Logout', link: null },
-  { icon: <SettingsIcon />, name: 'Admin', link: '/admin' },
-];
 
 interface User {
   avatar?: string;
@@ -29,15 +21,16 @@ const user: User = {
 };
 
 const ProfileBar = () => {
+  const { logout } = useAuth0();
+  const { dispatch, state } = useUserContext();
   const [open, setOpen] = useState(false);
   const firstLetter = user.name.charAt(0).toUpperCase();
 
-  const handleActionClick = (action: typeof actions[number]) => {
-    if (action.name === 'Logout') {
-      LogoutComponent();
-    } else if (action.link) {
-      window.location.href = action.link;
-    }
+  const handleLogout = () => {
+    logout({ logoutParams: { returnTo: window.location.origin } });
+    localStorage.removeItem('pszToken');
+    localStorage.removeItem('userState');
+    dispatch({ type: 'RESET_USER' });
   };
 
   return (
@@ -51,7 +44,7 @@ const ProfileBar = () => {
     >
       <Backdrop open={open} />
       <SpeedDial
-        ariaLabel='SpeedDial basic example'
+        ariaLabel='SpeedDial'
         sx={{
           position: 'relative',
           '& .MuiSpeedDial-fab': {
@@ -88,7 +81,7 @@ const ProfileBar = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: '#6A0DAD',
+                backgroundColor: (theme) => theme.palette.primary.main,
                 color: '#FFFFFF',
                 fontSize: '20px',
                 fontWeight: 'bold',
@@ -101,18 +94,58 @@ const ProfileBar = () => {
         direction={'down'}
         open={open}
       >
-        {actions.map((action) => (
+        <SpeedDialAction
+          key='Profile'
+          icon={<PersonIcon />}
+          tooltipTitle='Profile'
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpen(false);
+            router.navigate({ to: '/profile' });
+          }}
+        />
+        <SpeedDialAction
+          key='Library'
+          icon={<GamesIcon />}
+          tooltipTitle='Library'
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpen(false);
+            router.navigate({ to: '/library' });
+          }}
+        />
+        <SpeedDialAction
+          key='Reviews'
+          icon={<AddShoppingCartIcon />}
+          tooltipTitle='Reviews'
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpen(false);
+            router.navigate({ to: '/' });
+          }}
+        />
+        <SpeedDialAction
+          key='Logout'
+          icon={<LogoutIcon />}
+          tooltipTitle='Logout'
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpen(false);
+            handleLogout();
+          }}
+        />
+        {state.role === 1089 &&
           <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
+            key='Admin'
+            icon={<SettingsIcon />}
+            tooltipTitle='Admin'
             onClick={(e) => {
               e.stopPropagation();
-              handleActionClick(action);
               setOpen(false);
+              router.navigate({ to: '/admin' });
             }}
           />
-        ))}
+        }
       </SpeedDial>
     </Box>
   );

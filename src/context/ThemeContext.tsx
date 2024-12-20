@@ -2,17 +2,17 @@ import { createContext, FC, ReactNode } from 'react';
 import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 
 const darkTheme = {
-  background: "#1E1E1E",
-  text: "#fff",
-  iconActive: "#9BA1A6",
-  iconInactive: "#2d2d2d",
-  button: "#6B6B6B",
-  primary: "#2d2d2d",
-  secondary: "#FF8C00",
-  success: "#28A745",
-  danger: "#FF6347",
-  warning: "#FFCC00",
-  info: "#6495ED",
+  background: '#1E1E1E',
+  text: '#fff',
+  iconActive: '#9BA1A6',
+  iconInactive: '#2d2d2d',
+  button: '#6B6B6B',
+  primary: '#6A0DAD',
+  secondary: '#FF8C00',
+  success: '#28A745',
+  danger: '#FF6347',
+  warning: '#FFCC00',
+  info: '#6495ED',
 };
 
 interface ThemeContextProps {
