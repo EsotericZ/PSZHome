@@ -3,8 +3,8 @@ import { Box } from '@mui/material';
 import { useAuth0 } from '@auth0/auth0-react';
 
 import LoginButton from '../components/portal/LoginButton';
-import Navbar from '../components/navbar/Navbar';
-import ProfileBar from '../components/navbar/ProfileBar';
+import Navbar from '../components/Navbar/Navbar';
+import ProfileBar from '../components/Navbar/ProfileBar';
 import useSyncUserWithBackend from '../hooks/useSyncUserWithBackend';
 
 export const Route = createRootRoute({
