@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import type { AxiosInstance } from 'axios';
 
 import apiPrivate from '../api/apiPrivate';
+import refreshToken from '../services/portal/refreshToken';
 
 const useAxiosPrivate = (): AxiosInstance => {
   useEffect(() => {
@@ -25,9 +26,7 @@ const useAxiosPrivate = (): AxiosInstance => {
           originalRequest._retry = true;
 
           try {
-            const refreshResponse = await apiPrivate.post('/portal/refreshToken', {}, { withCredentials: true });
-            const newToken = refreshResponse.data.token;
-
+            const newToken = await refreshToken(apiPrivate);
             localStorage.setItem('pszToken', newToken);
             originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
 
