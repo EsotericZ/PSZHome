@@ -3,16 +3,16 @@ import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/st
 
 const darkTheme = {
   background: '#1E1E1E',
-  text: '#fff',
-  iconActive: '#9BA1A6',
-  iconInactive: '#2d2d2d',
-  button: '#6B6B6B',
+  text: '#EFE4D3',
+  iconActive: '#E673CF',
+  iconInactive: '#2D2D2D',
+  button: '#6A0DAD',
   primary: '#6A0DAD',
-  secondary: '#FF8C00',
+  secondary: '#F5C518',
   success: '#28A745',
   danger: '#FF6347',
-  warning: '#FFCC00',
-  info: '#6495ED',
+  warning: '#F5C518',
+  info: '#E673CF',
 };
 
 interface ThemeContextProps {

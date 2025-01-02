@@ -29,6 +29,7 @@ const ProfileBar = () => {
   const handleLogout = () => {
     logout({ logoutParams: { returnTo: window.location.origin } });
     localStorage.removeItem('pszToken');
+    localStorage.removeItem('pszRefreshToken');
     localStorage.removeItem('userState');
     dispatch({ type: 'RESET_USER' });
   };
