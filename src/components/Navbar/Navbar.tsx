@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
+import { useTheme } from '@mui/material/styles';
 
 import ChangeHistoryIcon from '@mui/icons-material/ChangeHistory';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
 import GamesIcon from '@mui/icons-material/Games';
 import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
 
-import { CircleMenu, CircleMenuItem } from 'react-circular-menu';
+import { CircleMenu, CircleMenuItem, TooltipPlacement } from 'react-circular-menu';
 import { Box, Backdrop } from '@mui/material';
 import { StyleSheetManager } from 'styled-components';
 import isPropValid from '@emotion/is-prop-valid';
@@ -14,6 +15,7 @@ import isPropValid from '@emotion/is-prop-valid';
 import LoginComponent from '../portal/LoginComponent';
 
 const Navbar = () => {
+  const theme = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -52,6 +54,24 @@ const Navbar = () => {
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: (theme) => theme.palette.primary.main,
+          boxShadow: isMenuOpen
+            ? `0 0 100px 50px ${theme.palette.primary.main}, 
+              0 0 200px 100px rgba(106, 13, 173, 0.5)`
+            : 'none',
+          animation: isMenuOpen
+            ? 'pulse 2.5s infinite ease-in-out'
+            : 'none',
+          '@keyframes pulse': {
+            '0%': {
+              boxShadow: `0 0 100px 50px ${theme.palette.primary.main}`,
+            },
+            '50%': {
+              boxShadow: `0 0 200px 100px rgba(106, 13, 173, 0.5)`,
+            },
+            '100%': {
+              boxShadow: `0 0 100px 50px ${theme.palette.primary.main}`,
+            },
+          },
         }}
         onClick={!isMenuOpen ? toggleMenu : undefined}
       >
@@ -75,7 +95,7 @@ const Navbar = () => {
               sx={{
                 backgroundColor: '#1C1C1E',
                 borderRadius: '50%',
-                padding: '10px',
+                padding: '12px',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -102,7 +122,7 @@ const Navbar = () => {
             </Box>
           </CircleMenuItem>
 
-          <CircleMenuItem tooltip='Games'>
+          <CircleMenuItem tooltip='Games' tooltipPlacement={TooltipPlacement.Right}>
             <Box
               sx={{
                 backgroundColor: '#1C1C1E',
