@@ -84,7 +84,7 @@ const Navbar = () => {
           onMenuToggle={isMenuOpen ? handleCloseMenu : undefined}
           menuToggleElement={
             isMenuOpen ? (
-              <GamesIcon sx={{ fontSize: 34, color: '#000',mt: 1 }} />
+              <GamesIcon sx={{ fontSize: 34, color: '#000', mt: 1 }} />
             ) : (
               <ChangeHistoryIcon sx={{ fontSize: 34, color: '#0BC904' }} />
             )

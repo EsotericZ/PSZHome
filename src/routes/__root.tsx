@@ -2,9 +2,10 @@ import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { Box } from '@mui/material';
 import { useAuth0 } from '@auth0/auth0-react';
 
+import Logo from '../components/navigation/Logo';
 import LoginButton from '../components/portal/LoginButton';
-import Navbar from '../components/Navbar/Navbar';
-import ProfileBar from '../components/Navbar/ProfileBar';
+import Navbar from '../components/navigation/Navbar';
+import ProfileBar from '../components/navigation/ProfileBar';
 import useSyncUserWithBackend from '../hooks/useSyncUserWithBackend';
 
 export const Route = createRootRoute({
@@ -18,6 +19,7 @@ function RootComponent() {
   return (
     <Box sx={{ display: 'flex' }}>
       <Navbar />
+      <Logo />
       {isAuthenticated ? <ProfileBar /> : <LoginButton />}
       <Box
         sx={{
@@ -26,6 +28,8 @@ function RootComponent() {
           alignItems: 'center',
           justifyContent: 'center',
           width: '100%',
+          mt: '75px',
+          mx: '75px'
         }}
       >
         <Outlet />

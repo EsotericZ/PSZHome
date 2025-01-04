@@ -2,15 +2,16 @@ import { useState } from 'react';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { Box, Stack, Typography, useMediaQuery } from '@mui/material';
 
+import SideBox from '../components/home/SideBox';
 
 export const Route = createLazyFileRoute('/')({
   component: Index,
 });
 
 function Index() {
-  const isMobile = useMediaQuery("(max-width:600px)");
-  const [featured, setFeatured] = useState("Featured");
-  const [boxes, setBoxes] = useState(["Box 1", "Box 2", "Box 3"]);
+  const isMobile = useMediaQuery('(max-width:600px)');
+  const [featured, setFeatured] = useState('Featured');
+  const [boxes, setBoxes] = useState(['Box 1', 'Box 2', 'Box 3', 'Box 4']);
 
   const handleBoxClick = (index: number) => {
     if (isMobile) return;
@@ -21,21 +22,36 @@ function Index() {
     setBoxes(newBoxes);
   };
 
+  const sideBar = [
+    {
+      name: 'Item 1',
+      color: 'info.main',
+    },
+    {
+      name: 'Item 2',
+      color: 'info.main',
+    },
+    {
+      name: 'Item 3',
+      color: 'info.main',
+    },
+  ];
+
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
         gap: 2,
-        width: "100%",
+        width: '100%',
         padding: 2,
       }}
     >
       {/* Main Content */}
       <Box
         sx={{
-          display: "flex",
-          flexDirection: isMobile ? "column" : "row",
+          display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
           gap: 2,
         }}
       >
@@ -43,44 +59,44 @@ function Index() {
         <Box
           sx={{
             flex: 1,
-            display: "flex",
-            flexDirection: "column",
+            display: 'flex',
+            flexDirection: 'column',
             gap: 2,
           }}
         >
           {/* Featured Box */}
           <Box
             sx={{
-              width: "100%",
+              width: '100%',
               height: 150,
-              backgroundColor: "primary.main",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              backgroundColor: 'primary.main',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
-            <Typography variant="h5" color="white">
+            <Typography variant='h5' color='white'>
               {featured}
             </Typography>
           </Box>
 
           {/* Smaller Boxes */}
-          <Stack direction={isMobile ? "column" : "row"} spacing={2}>
+          <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
             {boxes.map((box, index) => (
               <Box
                 key={index}
                 sx={{
-                  flexBasis: "100%", // Prevent shrinking on mobile
+                  flexBasis: '100%',
                   height: 100,
-                  backgroundColor: "secondary.main",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  cursor: isMobile ? "default" : "pointer",
+                  backgroundColor: 'secondary.main',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  cursor: isMobile ? 'default' : 'pointer',
                 }}
                 onClick={() => handleBoxClick(index)}
               >
-                <Typography variant="body1" color="white">
+                <Typography variant='body1' color='white'>
                   {box}
                 </Typography>
               </Box>
@@ -96,21 +112,12 @@ function Index() {
               flex: 0.25,
             }}
           >
-            {["Item 1", "Item 2", "Item 3"].map((item, index) => (
-              <Box
+            {sideBar.map((item, index) => (
+              <SideBox 
                 key={index}
-                sx={{
-                  height: 150,
-                  backgroundColor: "info.main",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Typography variant="body1" color="white">
-                  {item}
-                </Typography>
-              </Box>
+                name={item.name}
+                color={item.color} 
+              />
             ))}
           </Stack>
         )}
@@ -119,19 +126,19 @@ function Index() {
       {/* Sidebar for Mobile */}
       {isMobile && (
         <Stack spacing={2}>
-          {["Item 1", "Item 2", "Item 3"].map((item, index) => (
+          {sideBar.map((item, index) => (
             <Box
               key={index}
               sx={{
                 height: 100,
-                backgroundColor: "info.main",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                backgroundColor: 'info.main',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
-              <Typography variant="body1" color="white">
-                {item}
+              <Typography variant='body1' color='white'>
+                {item.name}
               </Typography>
             </Box>
           ))}
