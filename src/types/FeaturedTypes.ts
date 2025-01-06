@@ -1,6 +1,7 @@
 interface FeaturedProps {
   id: string;
   order: number;
+  description: string;
   colorDom?: string;
   colorSat?: string;
   esrb?: string;

@@ -1,31 +1,30 @@
 import { FC } from 'react';
-import { Box, TextField } from '@mui/material';
+import { TextField, Box } from '@mui/material';
 
-interface GameSearchProps {
-  onSearch: (value: string) => void;
+interface SearchBarProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
 }
 
-const GameSearch: FC<GameSearchProps> = ({ onSearch }) => {
+const SearchBar: FC<SearchBarProps> = ({ value, onChange, placeholder = 'Search...' }) => {
   return (
-    <Box
-      component='form'
-      noValidate
-      autoComplete='off'
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        my: 5
+    <Box 
+      sx={{ 
+        my: 2, 
+        width: '500px'
       }}
     >
       <TextField
-        label='Game Search'
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
         variant='outlined'
         fullWidth
-        onChange={(e) => onSearch(e.target.value)}
         sx={{
-          maxWidth: 400,
-          input: { color: 'white' },
+          input: {
+            color: 'white',
+          },
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
               borderColor: 'white',
@@ -47,6 +46,6 @@ const GameSearch: FC<GameSearchProps> = ({ onSearch }) => {
       />
     </Box>
   );
-}
+};
 
-export default GameSearch;
+export default SearchBar;

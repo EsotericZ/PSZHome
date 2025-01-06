@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import { SyntheticEvent, useEffect, useState } from 'react';
+import { Box, Tab, Tabs, Typography } from '@mui/material';
 
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import LooksOneIcon from '@mui/icons-material/LooksOne';
@@ -11,8 +11,11 @@ import GameCard from '../../components/admin/GameCard';
 import GameSearch from '../../components/admin/GameSearch';
 import FeaturedProps from '../../types/FeaturedTypes';
 import UserProps from '../../types/UserTypes';
+import GameProps from '../../types/GameTypes';
+import AdminTable from '../../components/admin/AdminTable';
 
 import getAllFeatured from '../../services/admin/getAllFeatured';
+import getAllGames from '../../services/games/getAllGames';
 import getAllUsers from '../../services/admin/getAllUsers';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
@@ -22,21 +25,24 @@ export const Route = createLazyFileRoute('/admin/')({
 
 function Admin() {
   const [featuredGames, setFeaturedGames] = useState<FeaturedProps[]>([]);
+  const [gameLibrary, setGameLibrary] = useState<GameProps[]>([]);
   const [searchedGames, setSearchedGames] = useState([]);
   const [users, setUsers] = useState<UserProps[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedTab, setSelectedTab] = useState(0);
   const apiPrivate = useAxiosPrivate();
   const rawg = import.meta.env.VITE_RAWG;
 
   const fetchData = async () => {
     try {
-      const [featuredData, userData] = await Promise.all([
+      const [featuredData, gameData, userData] = await Promise.all([
         getAllFeatured(apiPrivate),
+        getAllGames(apiPrivate),
         getAllUsers(apiPrivate),
       ]);
       setFeaturedGames(featuredData);
+      setGameLibrary(gameData);
       setUsers(userData);
-      console.log(featuredData)
     } catch (error) {
       console.error(error);
     } finally {
@@ -94,46 +100,123 @@ function Admin() {
     { title: 'Featured Game 3', Icon: Looks3Icon },
   ];
 
+  const handleChange = (_: SyntheticEvent, newValue: number) => {
+    setSelectedTab(newValue);
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
     <Box>
-      <h3>Admin</h3>
       {loading ? (
         <p>Loading</p>
       ) : (
         <>
-          <div>
-            {users.map((user, index) => (
-              <p key={index}>{user.email}</p>
-            ))}
-            {featuredGames.length > 0 ? (
-              featuredGames.map((game, index) => (
-                <p key={index}>{game.name}</p>
-              ))
-            ) : (
-              <p>No Featured Games</p>
-            )}
-          </div>
+          <Box sx={{ width: '100%' }}>
+            <Tabs 
+              value={selectedTab} 
+              onChange={handleChange} 
+              centered
+              sx={{
+                '& .MuiTab-root': {
+                  color: 'white',
+                  mx: 3,
+                },
+                '& .Mui-selected': {
+                  color: 'inherit',
+                },
+              }}  
+            >
+              <Tab label="Featured Games" />
+              <Tab label="Game Library" />
+              <Tab label="New Users" />
+              <Tab label="Verified Users" />
+            </Tabs>
+          </Box>
 
-          <GameSearch onSearch={(value) => handleFormSubmit(value)} />
-          <Box
-            sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 3,
-            }}
-          >
-            {searchedGames.map((game, index) => (
-              <GameCard
-                key={index}
-                game={game}
-                handleFeature={handleFeature}
-                featureConfig={featureConfig}
+          <Box>
+            {selectedTab === 0 && (
+              <Box sx= {{ pt: 2 }}>
+                {featuredGames.length > 0 ? (
+                  featuredGames.map((game, index) => (
+                    <Typography 
+                    key={index}
+                    variant='h6'
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                        my: 2,
+                      }}
+                    >
+                      {game.description}: {game.name}
+                    </Typography>
+                  ))
+                ) : (
+                  <Typography>
+                    No Featured Games
+                  </Typography>
+                )}
+                <GameSearch onSearch={(value) => handleFormSubmit(value)} />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: 3,
+                  }}
+                >
+                  {searchedGames.map((game, index) => (
+                    <GameCard
+                      key={index}
+                      game={game}
+                      handleFeature={handleFeature}
+                      featureConfig={featureConfig}
+                    />
+                  ))}
+                </Box>
+              </Box>
+            )}
+          </Box>
+          <Box>
+            {selectedTab === 1 && (
+              <div>
+                {gameLibrary.length > 0 ? (
+                  gameLibrary.map((game, index) => (
+                    <p key={index}>{game.name}</p>
+                  ))
+                ) : (
+                  <p>No Game Library</p>
+                )}
+              </div>
+            )}
+          </Box>
+          <Box>
+            {selectedTab === 2 && (
+              <AdminTable
+                users={users}
+                filterCondition={(user) => !user.verified}
+                columns={[
+                  { label: 'Email', key: 'email' },
+                  { label: 'PSN', key: 'psn' },
+                  { label: 'Verify Code', key: 'verifyCode' },
+                ]}
               />
-            ))}
+            )}
+          </Box>
+          <Box>
+            {selectedTab === 3 && (
+              <AdminTable
+                users={users}
+                filterCondition={(user) => user.verified}
+                columns={[
+                  { label: 'Email', key: 'email' },
+                  { label: 'PSN', key: 'psn' },
+                  { label: 'Role', key: 'role' },
+                ]}
+              />
+            )}
           </Box>
         </>
       )}
