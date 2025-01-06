@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+import { router } from '../../App';
 
 const Logo = () => {
   return (
@@ -11,11 +12,17 @@ const Logo = () => {
         zIndex: 1200,
       }}
     >
-      <Typography variant='h3'>
+      <Typography 
+        variant='h3'
+        onClick={() => {router.navigate({ to: '/' })}}
+        sx={{
+          cursor: 'pointer'
+        }}
+      >
         PSZ Reviews
       </Typography>
     </Box>
-  )
+  );
 }
 
 export default Logo;

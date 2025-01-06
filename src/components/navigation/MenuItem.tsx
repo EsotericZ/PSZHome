@@ -30,6 +30,6 @@ const MenuItem: FC<MenuItemProps> = ({ to, color, handleClick, children }) => {
       {children}
     </Box>
   );
-};
+}
 
 export default MenuItem;

@@ -8,7 +8,7 @@ const LoginButton: FC = () => {
 
   const handleLogin = () => {
     loginWithRedirect();
-  };
+  }
 
   return (
     <Box
@@ -35,6 +35,6 @@ const LoginButton: FC = () => {
       </Button>
     </Box>
   );
-};
+}
 
 export default LoginButton;

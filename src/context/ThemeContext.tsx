@@ -11,13 +11,13 @@ const darkTheme = {
   secondary: '#F5C518',
   success: '#28A745',
   danger: '#FF6347',
-  warning: '#F5C518',
+  warning: '#535485',
   info: '#E673CF',
-};
+}
 
 interface ThemeContextProps {
   theme: typeof darkTheme;
-};
+}
 
 export const ThemeContext = createContext<ThemeContextProps | undefined>(
   undefined
@@ -25,7 +25,7 @@ export const ThemeContext = createContext<ThemeContextProps | undefined>(
 
 interface ThemeProviderProps {
   children: ReactNode;
-};
+}
 
 export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
   const muiTheme = createTheme({
@@ -73,4 +73,4 @@ export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
       </MuiThemeProvider>
     </ThemeContext.Provider>
   );
-};
+}

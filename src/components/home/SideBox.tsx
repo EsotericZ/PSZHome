@@ -20,7 +20,7 @@ const SideBox = ({name, color}: SideBoxProps) => {
         {name}
       </Typography>
     </Box>
-  )
+  );
 }
 
 export default SideBox;

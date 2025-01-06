@@ -7,7 +7,7 @@ interface UserState {
   verified: boolean;
   psnAvatar: string | null;
   psnPlus: boolean;
-};
+}
 
 const initialState = {
   email: null,
@@ -16,7 +16,7 @@ const initialState = {
   verified: false,
   psnAvatar: null,
   psnPlus: false,
-};
+}
 
 type UserAction =
   | { type: 'SET_USER'; payload: Partial<UserState> }
@@ -42,7 +42,7 @@ const userReducer = (state: UserState, action: UserAction): UserState => {
     default:
       return state;
   }
-};
+}
 
 const UserContext = createContext<{
   state: UserState;
@@ -65,7 +65,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </UserContext.Provider>
   );
-};
+}
 
 export const useUserContext = () => {
   const context = useContext(UserContext);
@@ -73,4 +73,4 @@ export const useUserContext = () => {
     throw new Error('useUserContext must be used within a UserProvider');
   }
   return context;
-};
+}

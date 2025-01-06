@@ -13,12 +13,12 @@ import SettingsIcon from '@mui/icons-material/Settings';
 interface User {
   avatar?: string;
   name: string;
-};
+}
 
 const user: User = {
   avatar: '',
   name: 'CJ',
-};
+}
 
 const ProfileBar = () => {
   const { logout } = useAuth0();
@@ -150,6 +150,6 @@ const ProfileBar = () => {
       </SpeedDial>
     </Box>
   );
-};
+}
 
 export default ProfileBar;

@@ -20,11 +20,11 @@ const Navbar = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
-  };
+  }
 
   const handleCloseMenu = () => {
     setIsMenuOpen(false);
-  };
+  }
 
   return (
     <>
@@ -53,6 +53,7 @@ const Navbar = () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+          cursor: 'pointer',
           backgroundColor: (theme) => theme.palette.primary.main,
           boxShadow: isMenuOpen
             ? `0 0 100px 50px ${theme.palette.primary.main}, 
@@ -221,6 +222,6 @@ const Navbar = () => {
     </StyleSheetManager>
     </>
   );
-};
+}
 
 export default Navbar;

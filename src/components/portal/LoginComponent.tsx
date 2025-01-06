@@ -9,7 +9,7 @@ const LoginComponent: FC = () => {
 
   const handleLogin = () => {
     loginWithRedirect();
-  };
+  }
 
   return (
     <Box 
@@ -26,6 +26,6 @@ const LoginComponent: FC = () => {
       <CloseIcon sx={{ fontSize: 34 }} />
     </Box>
   );
-};
+}
 
 export default LoginComponent;
