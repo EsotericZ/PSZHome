@@ -1,18 +1,19 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import { Box, Tab, Tabs, Typography } from '@mui/material';
+import { Box, } from '@mui/material';
 
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import LooksOneIcon from '@mui/icons-material/LooksOne';
 import LooksTwoIcon from '@mui/icons-material/LooksTwo';
 import Looks3Icon from '@mui/icons-material/Looks3';
 
-import GameCard from '../../components/admin/GameCard';
-import GameSearch from '../../components/admin/GameSearch';
+import CustomTabs from '../../components/shared/CustomTabs';
+import FeaturedGames from '../../components/admin/FeaturedGames';
 import FeaturedProps from '../../types/FeaturedTypes';
-import UserProps from '../../types/UserTypes';
 import GameProps from '../../types/GameTypes';
-import AdminTable from '../../components/admin/AdminTable';
+import GameTable from '../../components/admin/GameTable';
+import UserProps from '../../types/UserTypes';
+import UserTable from '../../components/admin/UserTable';
 
 import getAllFeatured from '../../services/admin/getAllFeatured';
 import getAllGames from '../../services/games/getAllGames';
@@ -114,110 +115,59 @@ function Admin() {
         <p>Loading</p>
       ) : (
         <>
-          <Box sx={{ width: '100%' }}>
-            <Tabs 
-              value={selectedTab} 
-              onChange={handleChange} 
-              centered
-              sx={{
-                '& .MuiTab-root': {
-                  color: 'white',
-                  mx: 3,
-                },
-                '& .Mui-selected': {
-                  color: 'inherit',
-                },
-              }}  
-            >
-              <Tab label="Featured Games" />
-              <Tab label="Game Library" />
-              <Tab label="New Users" />
-              <Tab label="Verified Users" />
-            </Tabs>
-          </Box>
+          <CustomTabs
+            selectedTab={selectedTab}
+            onChange={handleChange}
+            labels={['Featured Games', 'Game Library', 'New Users', 'Verified Users']}
+          />
 
-          <Box>
-            {selectedTab === 0 && (
-              <Box sx= {{ pt: 2 }}>
-                {featuredGames.length > 0 ? (
-                  featuredGames.map((game, index) => (
-                    <Typography 
-                    key={index}
-                    variant='h6'
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                        my: 2,
-                      }}
-                    >
-                      {game.description}: {game.name}
-                    </Typography>
-                  ))
-                ) : (
-                  <Typography>
-                    No Featured Games
-                  </Typography>
-                )}
-                <GameSearch onSearch={(value) => handleFormSubmit(value)} />
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: 3,
-                  }}
-                >
-                  {searchedGames.map((game, index) => (
-                    <GameCard
-                      key={index}
-                      game={game}
-                      handleFeature={handleFeature}
-                      featureConfig={featureConfig}
-                    />
-                  ))}
-                </Box>
-              </Box>
-            )}
-          </Box>
-          <Box>
-            {selectedTab === 1 && (
-              <div>
-                {gameLibrary.length > 0 ? (
-                  gameLibrary.map((game, index) => (
-                    <p key={index}>{game.name}</p>
-                  ))
-                ) : (
-                  <p>No Game Library</p>
-                )}
-              </div>
-            )}
-          </Box>
-          <Box>
-            {selectedTab === 2 && (
-              <AdminTable
-                users={users}
-                filterCondition={(user) => !user.verified}
-                columns={[
-                  { label: 'Email', key: 'email' },
-                  { label: 'PSN', key: 'psn' },
-                  { label: 'Verify Code', key: 'verifyCode' },
-                ]}
-              />
-            )}
-          </Box>
-          <Box>
-            {selectedTab === 3 && (
-              <AdminTable
-                users={users}
-                filterCondition={(user) => user.verified}
-                columns={[
-                  { label: 'Email', key: 'email' },
-                  { label: 'PSN', key: 'psn' },
-                  { label: 'Role', key: 'role' },
-                ]}
-              />
-            )}
-          </Box>
+          {selectedTab === 0 && (
+            <FeaturedGames
+              featuredGames={featuredGames}
+              searchedGames={searchedGames}
+              handleFormSubmit={handleFormSubmit}
+              handleFeature={handleFeature}
+              featureConfig={featureConfig}
+            />
+          )}
+
+          {selectedTab === 1 && (
+            <GameTable
+              games={gameLibrary}
+              filterCondition={() => true}
+              columns={[
+                { label: 'Game', key: 'name' },
+                { label: 'Released', key: 'released' },
+              ]}
+            />
+          )}
+
+          {selectedTab === 2 && (
+            <UserTable
+              users={users}
+              filterCondition={(user) => !user.verified}
+              columns={[
+                { label: 'Email', key: 'email' },
+                { label: 'PSN', key: 'psn' },
+                { label: 'Verify Code', key: 'verifyCode' },
+                { label: 'Created', key: 'createdat' },
+              ]}
+            />
+          )}
+
+          {selectedTab === 3 && (
+            <UserTable
+              users={users}
+              filterCondition={(user) => user.verified}
+              columns={[
+                { label: 'Email', key: 'email' },
+                { label: 'PSN', key: 'psn' },
+                { label: 'Role', key: 'role' },
+                { label: 'Created', key: 'createdat' },
+              ]}
+            />
+          )}
+
         </>
       )}
     </Box>
