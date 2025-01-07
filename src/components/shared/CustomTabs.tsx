@@ -1,13 +1,14 @@
-import { FC } from 'react';
+import { FC, ReactNode, SyntheticEvent } from 'react';
 import { Box, Tabs, Tab } from '@mui/material';
 
 interface CustomTabsProps {
   selectedTab: number;
-  onChange: (event: React.SyntheticEvent, newValue: number) => void;
+  onChange: (event: SyntheticEvent, newValue: number) => void;
   labels: string[];
+  tabIcons?: (ReactNode | null)[];
 }
 
-const CustomTabs: FC<CustomTabsProps> = ({ selectedTab, onChange, labels }) => {
+const CustomTabs: FC<CustomTabsProps> = ({ selectedTab, onChange, labels, tabIcons = [] }) => {
   return (
     <Box sx={{ width: '100%', pb: 3 }}>
       <Tabs
@@ -25,7 +26,15 @@ const CustomTabs: FC<CustomTabsProps> = ({ selectedTab, onChange, labels }) => {
         }}
       >
         {labels.map((label, index) => (
-          <Tab key={index} label={label} />
+          <Tab
+            key={index}
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {label}
+                {tabIcons[index]}
+              </Box>
+            }
+          />
         ))}
       </Tabs>
     </Box>

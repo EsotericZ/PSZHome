@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import { Box, } from '@mui/material';
+import { Badge, Box } from '@mui/material';
 
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import LooksOneIcon from '@mui/icons-material/LooksOne';
@@ -17,8 +17,9 @@ import UserTable from '../../components/admin/UserTable';
 
 import getAllFeatured from '../../services/admin/getAllFeatured';
 import getAllGames from '../../services/games/getAllGames';
-import getAllUsers from '../../services/admin/getAllUsers';
+import getNewUsers from '../../services/admin/getNewUsers';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import getVerifiedUsers from '../../services/admin/getVerifiedUsers';
 
 export const Route = createLazyFileRoute('/admin/')({
   component: Admin,
@@ -28,7 +29,8 @@ function Admin() {
   const [featuredGames, setFeaturedGames] = useState<FeaturedProps[]>([]);
   const [gameLibrary, setGameLibrary] = useState<GameProps[]>([]);
   const [searchedGames, setSearchedGames] = useState([]);
-  const [users, setUsers] = useState<UserProps[]>([]);
+  const [newUsers, setNewUsers] = useState<UserProps[]>([]);
+  const [verifiedUsers, setVerifiedUsers] = useState<UserProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(0);
   const apiPrivate = useAxiosPrivate();
@@ -36,14 +38,16 @@ function Admin() {
 
   const fetchData = async () => {
     try {
-      const [featuredData, gameData, userData] = await Promise.all([
+      const [featuredData, gameData, newUserData, verifiedUserData] = await Promise.all([
         getAllFeatured(apiPrivate),
         getAllGames(apiPrivate),
-        getAllUsers(apiPrivate),
+        getNewUsers(apiPrivate),
+        getVerifiedUsers(apiPrivate),
       ]);
       setFeaturedGames(featuredData);
       setGameLibrary(gameData);
-      setUsers(userData);
+      setNewUsers(newUserData);
+      setVerifiedUsers(verifiedUserData);
     } catch (error) {
       console.error(error);
     } finally {
@@ -101,6 +105,10 @@ function Admin() {
     { title: 'Featured Game 3', Icon: Looks3Icon },
   ];
 
+  const unverifiedUsersWithCodeCount = newUsers.filter(
+    (user) => !user.verified && user.verifyCode
+  ).length;
+
   const handleChange = (_: SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
   };
@@ -119,6 +127,27 @@ function Admin() {
             selectedTab={selectedTab}
             onChange={handleChange}
             labels={['Featured Games', 'Game Library', 'New Users', 'Verified Users']}
+            tabIcons={[
+              null,
+              null,
+              unverifiedUsersWithCodeCount > 0 ? (
+                <Badge
+                  badgeContent={unverifiedUsersWithCodeCount}
+                  sx={{
+                    '& .MuiBadge-badge': {
+                      backgroundColor: 'red',
+                      color: 'white',
+                      fontSize: '0.75rem',
+                      height: '16px',
+                      minWidth: '16px',
+                      borderRadius: '50%',
+                    },
+                    ml: 2
+                  }}
+                />
+              ) : null,
+              null,
+            ]}
           />
 
           {selectedTab === 0 && (
@@ -144,26 +173,24 @@ function Admin() {
 
           {selectedTab === 2 && (
             <UserTable
-              users={users}
-              filterCondition={(user) => !user.verified}
+              users={newUsers}
               columns={[
                 { label: 'Email', key: 'email' },
                 { label: 'PSN', key: 'psn' },
                 { label: 'Verify Code', key: 'verifyCode' },
-                { label: 'Created', key: 'createdat' },
+                { label: 'Created', key: 'createdAt' },
               ]}
             />
           )}
 
           {selectedTab === 3 && (
             <UserTable
-              users={users}
-              filterCondition={(user) => user.verified}
+              users={verifiedUsers}
               columns={[
                 { label: 'Email', key: 'email' },
                 { label: 'PSN', key: 'psn' },
                 { label: 'Role', key: 'role' },
-                { label: 'Created', key: 'createdat' },
+                { label: 'Created', key: 'createdAt' },
               ]}
             />
           )}

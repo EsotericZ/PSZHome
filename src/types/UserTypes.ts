@@ -8,7 +8,7 @@ interface UserProps {
   psnAccountId?: string;
   psnAvatar?: string;
   psnPlus: boolean;
-  createdat: string;
+  createdAt: string;
 }
 
 export default UserProps;

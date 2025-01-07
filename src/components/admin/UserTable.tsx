@@ -5,11 +5,10 @@ import UserProps from '../../types/UserTypes';
 
 interface UserTableProps {
   users: UserProps[];
-  filterCondition: (user: UserProps) => boolean;
   columns: { label: string; key: keyof UserProps }[];
 }
 
-const UserTable: FC<UserTableProps> = ({ users, filterCondition, columns }) => {
+const UserTable: FC<UserTableProps> = ({ users, columns }) => {
   const [searchTerms, setSearchTerms] = useState<{ [key: string]: string }>({});
   const [editingColumn, setEditingColumn] = useState<string | null>(null);
   const [page, setPage] = useState(0);
@@ -35,21 +34,19 @@ const UserTable: FC<UserTableProps> = ({ users, filterCondition, columns }) => {
     }
   };
 
-  const filteredUsers = users
-    .filter(filterCondition)
-    .filter((user) =>
-      columns.every((column) => {
-        const searchTerm = searchTerms[column.key] || '';
-        if (!searchTerm) return true;
+  const filteredUsers = users.filter((user) =>
+    columns.every((column) => {
+      const searchTerm = searchTerms[column.key] || '';
+      if (!searchTerm) return true;
 
-        const value =
-          column.key === 'role'
-            ? formatRole(user[column.key] as number).toLowerCase()
-            : user[column.key]?.toString().toLowerCase() || '';
+      const value =
+        column.key === 'role'
+          ? formatRole(user[column.key] as number).toLowerCase()
+          : user[column.key]?.toString().toLowerCase() || '';
 
-        return value.includes(searchTerm.toLowerCase());
-      })
-    );
+      return value.includes(searchTerm.toLowerCase());
+    })
+  );
 
   const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
 
@@ -114,14 +111,14 @@ const UserTable: FC<UserTableProps> = ({ users, filterCondition, columns }) => {
           <TableRow>
             {columns.map((column) => (
               <TableCell
-                align='center'
+                align="center"
                 key={column.key}
                 sx={{ position: 'relative', cursor: 'pointer' }}
                 onClick={() => setEditingColumn(column.key)}
               >
                 {editingColumn === column.key ? (
                   <input
-                    type='text'
+                    type="text"
                     value={searchTerms[column.key] || ''}
                     autoFocus
                     style={{
@@ -146,12 +143,12 @@ const UserTable: FC<UserTableProps> = ({ users, filterCondition, columns }) => {
           {paginatedUsers.map((user, index) => (
             <TableRow key={index}>
               {columns.map((column) => (
-                <TableCell align='center' key={column.key}>
-                  {column.key === 'createdat' && user[column.key]
+                <TableCell align="center" key={column.key}>
+                  {column.key === 'createdAt' && user[column.key]
                     ? formatDate(user[column.key] as string)
                     : column.key === 'role' && user[column.key]
-                      ? formatRole(user[column.key] as number)
-                      : user[column.key]}
+                    ? formatRole(user[column.key] as number)
+                    : user[column.key]}
                 </TableCell>
               ))}
             </TableRow>
