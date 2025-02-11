@@ -24,11 +24,11 @@ function Index() {
 
   const sideBar = [
     {
-      name: 'Item 1',
+      name: 'Top Rated',
       color: 'info.main',
     },
     {
-      name: 'Item 2',
+      name: 'Search Games',
       color: 'info.main',
     },
     {
