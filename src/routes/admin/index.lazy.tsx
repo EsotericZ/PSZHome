@@ -1,5 +1,5 @@
-import { createLazyFileRoute } from '@tanstack/react-router';
 import { SyntheticEvent, useEffect, useState } from 'react';
+import { createLazyFileRoute } from '@tanstack/react-router';
 import { Badge, Box } from '@mui/material';
 
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';

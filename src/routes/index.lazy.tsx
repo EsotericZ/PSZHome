@@ -1,26 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { Box, Stack, Typography, useMediaQuery } from '@mui/material';
 
 import SideBox from '../components/home/SideBox';
+import FeaturedProps from '../types/FeaturedTypes';
+import LoadSymbol from '../components/shared/LoadSymbol';
+
+import getAllFeatured from '../services/home/getAllFeatured';
 
 export const Route = createLazyFileRoute('/')({
   component: Index,
 });
 
 function Index() {
-  const isMobile = useMediaQuery('(max-width:600px)');
-  const [featured, setFeatured] = useState('Featured');
-  const [boxes, setBoxes] = useState(['Box 1', 'Box 2', 'Box 3', 'Box 4']);
-
-  const handleBoxClick = (index: number) => {
-    if (isMobile) return;
-
-    const newFeatured = boxes[index];
-    const newBoxes = [featured, ...boxes.filter((_, i) => i !== index)];
-    setFeatured(newFeatured);
-    setBoxes(newBoxes);
-  };
+  const isMobile = useMediaQuery('(max-width:800px)');
+  const [loading, setLoading] = useState(true);
+  const [featured, setFeatured] = useState<FeaturedProps>();
+  const [boxes, setBoxes] = useState<FeaturedProps[]>([]);
 
   const sideBar = [
     {
@@ -37,6 +33,42 @@ function Index() {
     },
   ];
 
+  const fetchData = async () => {
+    try {
+      const featuredData = await getAllFeatured();
+      const newFeatured = featuredData.find((item: any) => item.order === 1);
+
+      const newBoxes = featuredData
+        .filter((item: any) => item.order > 1)
+        .sort((a: any, b: any) => a.order - b.order);
+
+      if (newFeatured) {
+        setFeatured(newFeatured);
+      }
+      setBoxes(newBoxes.map((item: any) => ({ name: item.name, order: item.order })));        
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleBoxClick = (index: number) => {
+    if (!featured) return;
+  
+    const newFeatured = boxes[index];
+    const newBoxes = boxes.map((box, i) =>
+      i === index ? featured : box
+    );
+  
+    setFeatured(newFeatured);
+    setBoxes(newBoxes.sort((a, b) => a.order - b.order));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -47,7 +79,6 @@ function Index() {
         padding: 2,
       }}
     >
-      {/* Main Content */}
       <Box
         sx={{
           display: 'flex',
@@ -55,7 +86,6 @@ function Index() {
           gap: 2,
         }}
       >
-        {/* Featured and Smaller Boxes */}
         <Box
           sx={{
             flex: 1,
@@ -64,7 +94,6 @@ function Index() {
             gap: 2,
           }}
         >
-          {/* Featured Box */}
           <Box
             sx={{
               width: '100%',
@@ -75,12 +104,15 @@ function Index() {
               alignItems: 'center',
             }}
           >
-            <Typography variant='h5' color='white'>
-              {featured}
-            </Typography>
+            {loading ? (
+              <LoadSymbol />
+            ) : (
+              <Typography variant='h5' color='white'>
+                {featured?.name}
+              </Typography>
+            )}
           </Box>
 
-          {/* Smaller Boxes */}
           <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
             {boxes.map((box, index) => (
               <Box
@@ -96,15 +128,18 @@ function Index() {
                 }}
                 onClick={() => handleBoxClick(index)}
               >
-                <Typography variant='body1' color='white'>
-                  {box}
-                </Typography>
+                {loading ? (
+                  <LoadSymbol />
+                ) : (
+                  <Typography variant='body1' color='white'>
+                    {box.name}
+                  </Typography>
+                )}
               </Box>
             ))}
           </Stack>
         </Box>
 
-        {/* Sidebar for Desktop */}
         {!isMobile && (
           <Stack
             spacing={2}
@@ -123,7 +158,6 @@ function Index() {
         )}
       </Box>
 
-      {/* Sidebar for Mobile */}
       {isMobile && (
         <Stack spacing={2}>
           {sideBar.map((item, index) => (

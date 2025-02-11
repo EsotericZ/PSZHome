@@ -29,7 +29,7 @@ function RootComponent() {
           justifyContent: 'center',
           width: '100%',
           mt: '75px',
-          mx: '75px'
+          mx: '25px'
         }}
       >
         <Outlet />

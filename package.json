@@ -20,7 +20,8 @@
     "axios": "^1.7.8",
     "react": "^18.3.1",
     "react-circular-menu": "^2.4.14",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-spinners": "^0.15.0"
   },
   "devDependencies": {
     "@tanstack/router-devtools": "^1.46.5",
