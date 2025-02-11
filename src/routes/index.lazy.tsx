@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { Box, Stack, Typography, useMediaQuery } from '@mui/material';
 
-import SideBox from '../components/home/SideBox';
+import Featured from '../components/home/Featured';
 import FeaturedProps from '../types/FeaturedTypes';
 import LoadSymbol from '../components/shared/LoadSymbol';
+import SideBox from '../components/home/SideBox';
 
 import getAllFeatured from '../services/home/getAllFeatured';
 
@@ -96,23 +97,21 @@ function Index() {
         >
           <Box
             sx={{
-              width: '100%',
-              height: 150,
-              backgroundColor: 'primary.main',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
+              position: 'relative',
+              width: '100%', 
+              height: '100%',
+              overflow: 'hidden',
+              boxShadow: '0px 0px 8px 0px #E5E4E2',
+              borderRadius: '12px'
             }}
           >
+
             {loading ? (
               <LoadSymbol />
             ) : (
-              <Typography variant='h5' color='white'>
-                {featured?.name}
-              </Typography>
-              // <img
-              //   src={featured?.image}
-              // />
+              <Featured
+                featured={featured}
+              />
             )}
           </Box>
 
@@ -144,7 +143,7 @@ function Index() {
                         opacity: 0.3,
                       },
                       '&:hover .box-text': {
-                        opacity: 1, 
+                        opacity: 1,
                       },
                     }}
                   >
@@ -155,7 +154,7 @@ function Index() {
                         width: '100%',
                         height: 'auto',
                         borderRadius: '8px',
-                        boxShadow: '0px 0px 10px rgba(255, 255, 255, 0.3)', 
+                        boxShadow: '0px 0px 10px rgba(255, 255, 255, 0.3)',
                         transition: 'opacity 0.3s ease-in-out',
                       }}
                     />
@@ -166,8 +165,8 @@ function Index() {
                         position: 'absolute',
                         color: 'white',
                         fontWeight: 'bold',
-                        textShadow: '2px 2px 5px black', 
-                        opacity: 0, 
+                        textShadow: '2px 2px 5px black',
+                        opacity: 0,
                         transition: 'opacity 0.3s ease-in-out',
                       }}
                     >

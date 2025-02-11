@@ -15,6 +15,11 @@ const darkTheme = {
   info: '#E673CF',
 }
 
+// plat: #E5E4E2 
+// gold: #D4AF37 
+// silver: #C0C0C0 
+// bronze: #8C7853 
+
 interface ThemeContextProps {
   theme: typeof darkTheme;
 }
