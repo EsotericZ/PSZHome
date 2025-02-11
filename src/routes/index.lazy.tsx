@@ -45,7 +45,7 @@ function Index() {
       if (newFeatured) {
         setFeatured(newFeatured);
       }
-      setBoxes(newBoxes.map((item: any) => ({ name: item.name, order: item.order })));        
+      setBoxes(newBoxes.map((item: any) => item));
     } catch (error) {
       console.error(error);
     } finally {
@@ -55,12 +55,12 @@ function Index() {
 
   const handleBoxClick = (index: number) => {
     if (!featured) return;
-  
+
     const newFeatured = boxes[index];
     const newBoxes = boxes.map((box, i) =>
       i === index ? featured : box
     );
-  
+
     setFeatured(newFeatured);
     setBoxes(newBoxes.sort((a, b) => a.order - b.order));
   };
@@ -110,6 +110,9 @@ function Index() {
               <Typography variant='h5' color='white'>
                 {featured?.name}
               </Typography>
+              // <img
+              //   src={featured?.image}
+              // />
             )}
           </Box>
 
@@ -119,21 +122,58 @@ function Index() {
                 key={index}
                 sx={{
                   flexBasis: '100%',
-                  height: 100,
-                  backgroundColor: 'secondary.main',
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
                   cursor: isMobile ? 'default' : 'pointer',
+                  position: 'relative',
                 }}
                 onClick={() => handleBoxClick(index)}
               >
                 {loading ? (
                   <LoadSymbol />
                 ) : (
-                  <Typography variant='body1' color='white'>
-                    {box.name}
-                  </Typography>
+                  <Box
+                    sx={{
+                      position: 'relative',
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      '&:hover img': {
+                        opacity: 0.3,
+                      },
+                      '&:hover .box-text': {
+                        opacity: 1, 
+                      },
+                    }}
+                  >
+                    <img
+                      src={box.image}
+                      alt={box.name}
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        borderRadius: '8px',
+                        boxShadow: '0px 0px 10px rgba(255, 255, 255, 0.3)', 
+                        transition: 'opacity 0.3s ease-in-out',
+                      }}
+                    />
+                    <Typography
+                      className='box-text'
+                      variant='h6'
+                      sx={{
+                        position: 'absolute',
+                        color: 'white',
+                        fontWeight: 'bold',
+                        textShadow: '2px 2px 5px black', 
+                        opacity: 0, 
+                        transition: 'opacity 0.3s ease-in-out',
+                      }}
+                    >
+                      {box.name}
+                    </Typography>
+                  </Box>
                 )}
               </Box>
             ))}
@@ -148,10 +188,10 @@ function Index() {
             }}
           >
             {sideBar.map((item, index) => (
-              <SideBox 
+              <SideBox
                 key={index}
                 name={item.name}
-                color={item.color} 
+                color={item.color}
               />
             ))}
           </Stack>
