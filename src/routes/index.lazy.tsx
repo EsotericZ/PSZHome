@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { createLazyFileRoute } from '@tanstack/react-router';
-import { Box, Stack, Typography, useMediaQuery } from '@mui/material';
+import { createLazyFileRoute, Link } from '@tanstack/react-router';
+import { Box, Stack, useMediaQuery } from '@mui/material';
 
+import BoxItemFull from '../components/home/BoxItemFull';
+import BoxItemSmall from '../components/home/BoxItemSmall';
 import Featured from '../components/home/Featured';
 import FeaturedProps from '../types/FeaturedTypes';
 import LoadSymbol from '../components/shared/LoadSymbol';
@@ -14,7 +16,7 @@ export const Route = createLazyFileRoute('/')({
 });
 
 function Index() {
-  const isMobile = useMediaQuery('(max-width:800px)');
+  const isMobile = useMediaQuery('(max-width:950px)');
   const [loading, setLoading] = useState(true);
   const [featured, setFeatured] = useState<FeaturedProps>();
   const [boxes, setBoxes] = useState<FeaturedProps[]>([]);
@@ -22,15 +24,15 @@ function Index() {
   const sideBar = [
     {
       name: 'Top Rated',
-      color: 'info.main',
+      link: '/topRated',
     },
     {
       name: 'Search Games',
-      color: 'info.main',
+      link: '/games',
     },
     {
-      name: 'Item 3',
-      color: 'info.main',
+      name: 'PSZ Users',
+      link: '/',
     },
   ];
 
@@ -98,7 +100,7 @@ function Index() {
           <Box
             sx={{
               position: 'relative',
-              width: '100%', 
+              width: '100%',
               height: '100%',
               overflow: 'hidden',
               boxShadow: '0px 0px 8px 0px #E5E4E2',
@@ -115,83 +117,63 @@ function Index() {
             )}
           </Box>
 
-          <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
+          <Box 
+            display='flex'
+            flexDirection={isMobile ? 'column' : 'row'} 
+            gap={2}
+          >
             {boxes.map((box, index) => (
-              <Box
+              isMobile ? (
+                <Box
                 key={index}
                 sx={{
-                  flexBasis: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  cursor: isMobile ? 'default' : 'pointer',
-                  position: 'relative',
+                  flexGrow: 1, // ✅ Allows boxes to expand properly
+                  // height: isMobile ? '100px' : 'auto',
+                  // backgroundColor: 'red', // ✅ Testing visibility
                 }}
-                onClick={() => handleBoxClick(index)}
               >
-                {loading ? (
-                  <LoadSymbol />
-                ) : (
-                  <Box
-                    sx={{
-                      position: 'relative',
-                      width: '100%',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      '&:hover img': {
-                        opacity: 0.3,
-                      },
-                      '&:hover .box-text': {
-                        opacity: 1,
-                      },
-                    }}
-                  >
-                    <img
-                      src={box.image}
-                      alt={box.name}
-                      style={{
-                        width: '100%',
-                        height: 'auto',
-                        borderRadius: '8px',
-                        boxShadow: '0px 0px 10px rgba(255, 255, 255, 0.3)',
-                        transition: 'opacity 0.3s ease-in-out',
-                      }}
-                    />
-                    <Typography
-                      className='box-text'
-                      variant='h6'
-                      sx={{
-                        position: 'absolute',
-                        color: 'white',
-                        fontWeight: 'bold',
-                        textShadow: '2px 2px 5px black',
-                        opacity: 0,
-                        transition: 'opacity 0.3s ease-in-out',
-                      }}
-                    >
-                      {box.name}
-                    </Typography>
-                  </Box>
-                )}
-              </Box>
+                <BoxItemSmall
+                  key={index}
+                  box={box}
+                  index={index}
+                  handleBoxClick={handleBoxClick}
+                />
+                </Box>
+              ) : (
+                <BoxItemFull
+                  key={index}
+                  box={box} 
+                  index={index} 
+                  isMobile={isMobile} 
+                  loading={loading} 
+                  handleBoxClick={handleBoxClick}
+                />
+              )
             ))}
-          </Stack>
+          </Box>
         </Box>
 
         {!isMobile && (
           <Stack
             spacing={2}
             sx={{
-              flex: 0.25,
+              flex: 0.15,
             }}
           >
             {sideBar.map((item, index) => (
-              <SideBox
+              <Link
                 key={index}
-                name={item.name}
-                color={item.color}
-              />
+                to={item.link}
+                style={{
+                  textDecoration: 'none',
+                  color: 'inherit',
+                }}
+              >
+                <SideBox
+                  name={item.name}
+                  height={150}
+                />
+              </Link>
             ))}
           </Stack>
         )}
@@ -200,20 +182,19 @@ function Index() {
       {isMobile && (
         <Stack spacing={2}>
           {sideBar.map((item, index) => (
-            <Box
+            <Link
               key={index}
-              sx={{
-                height: 100,
-                backgroundColor: 'info.main',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
+              to={item.link}
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
               }}
             >
-              <Typography variant='body1' color='white'>
-                {item.name}
-              </Typography>
-            </Box>
+              <SideBox
+                name={item.name}
+                height={100}
+              />
+            </Link>
           ))}
         </Stack>
       )}

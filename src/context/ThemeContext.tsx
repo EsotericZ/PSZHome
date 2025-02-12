@@ -15,7 +15,8 @@ const darkTheme = {
   info: '#E673CF',
 }
 
-// plat: #E5E4E2 
+// plat1: #E5E4E2 
+// plat2: #8fa6c6  
 // gold: #D4AF37 
 // silver: #C0C0C0 
 // bronze: #8C7853 
