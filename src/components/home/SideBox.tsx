@@ -1,11 +1,13 @@
 import { Box, Typography } from '@mui/material';
+import { Variant } from '@mui/material/styles/createTypography';
 
 interface SideBoxProps {
   name: string;
   height: number;
+  variant: Variant;
 }
 
-const SideBox = ({name, height}: SideBoxProps) => {
+const SideBox = ({name, height, variant}: SideBoxProps) => {
   return (
     <Box
       sx={{
@@ -19,7 +21,7 @@ const SideBox = ({name, height}: SideBoxProps) => {
       }}
     >
       <Typography
-        variant='body1'
+        variant= {variant}
         sx={{
           color: 'white',
           fontWeight: 'bold',

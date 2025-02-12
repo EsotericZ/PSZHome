@@ -27,7 +27,7 @@ function Index() {
       link: '/topRated',
     },
     {
-      name: 'Search Games',
+      name: 'Games',
       link: '/games',
     },
     {
@@ -127,9 +127,7 @@ function Index() {
                 <Box
                 key={index}
                 sx={{
-                  flexGrow: 1, // ✅ Allows boxes to expand properly
-                  // height: isMobile ? '100px' : 'auto',
-                  // backgroundColor: 'red', // ✅ Testing visibility
+                  flexGrow: 1,
                 }}
               >
                 <BoxItemSmall
@@ -172,6 +170,7 @@ function Index() {
                 <SideBox
                   name={item.name}
                   height={150}
+                  variant='body1'
                 />
               </Link>
             ))}
@@ -193,6 +192,7 @@ function Index() {
               <SideBox
                 name={item.name}
                 height={100}
+                variant='h6'
               />
             </Link>
           ))}

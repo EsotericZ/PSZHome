@@ -23,9 +23,22 @@ const BoxItemSmall = ({ box, index, handleBoxClick }: BoxItemSmallProps) => {
       }}
       onClick={() => handleBoxClick(index)}
     >
+      <img
+        src={box.image}
+        alt={box.name}
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          borderRadius: '8px',
+          opacity: 0.7,
+        }}
+      />
       <Typography
         variant='h6'
         sx={{
+          position: 'relative',
           color: 'white',
           fontWeight: 'bold',
           textShadow: '2px 2px 5px black',
