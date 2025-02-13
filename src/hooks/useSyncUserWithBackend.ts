@@ -21,6 +21,7 @@ const useSyncUserWithBackend = () => {
           dispatch({
             type: 'SET_USER',
             payload: {
+              id: userData.id,
               email: user.email,
               psn: userData.psn,
               role: userData.role,

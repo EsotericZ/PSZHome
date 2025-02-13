@@ -1,6 +1,7 @@
 import { createContext, Dispatch, ReactNode, useContext, useEffect, useReducer } from 'react';
 
 interface UserState {
+  id: string | null;
   email: string | null;
   psn: string | null;
   role: number;
@@ -10,6 +11,7 @@ interface UserState {
 }
 
 const initialState = {
+  id: null,
   email: null,
   psn: null,
   role: 0,
@@ -32,6 +34,7 @@ const userReducer = (state: UserState, action: UserAction): UserState => {
     case 'RESET_USER':
       return {
         ...state,
+        id: null,
         email: null,
         psn: null,
         role: 0,

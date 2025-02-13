@@ -18,8 +18,8 @@ import UserTable from '../../components/admin/UserTable';
 import getAllFeatured from '../../services/admin/getAllFeatured';
 import getAllGames from '../../services/games/getAllGames';
 import getNewUsers from '../../services/admin/getNewUsers';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import getVerifiedUsers from '../../services/admin/getVerifiedUsers';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 export const Route = createLazyFileRoute('/admin/')({
   component: Admin,
@@ -31,7 +31,7 @@ function Admin() {
   const [searchedGames, setSearchedGames] = useState([]);
   const [newUsers, setNewUsers] = useState<UserProps[]>([]);
   const [verifiedUsers, setVerifiedUsers] = useState<UserProps[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectedTab, setSelectedTab] = useState(0);
   const apiPrivate = useAxiosPrivate();
   const rawg = import.meta.env.VITE_RAWG;
@@ -95,7 +95,6 @@ function Admin() {
       updated[index] = game;
       return updated;
     });
-    console.log(featuredGames)
   }
 
   const featureConfig = [

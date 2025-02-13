@@ -21,6 +21,7 @@ const TopRatedIndexLazyImport = createFileRoute('/topRated/')()
 const ProfileIndexLazyImport = createFileRoute('/profile/')()
 const LibraryIndexLazyImport = createFileRoute('/library/')()
 const GamesIndexLazyImport = createFileRoute('/games/')()
+const FriendsIndexLazyImport = createFileRoute('/friends/')()
 const AdminIndexLazyImport = createFileRoute('/admin/')()
 
 // Create/Update Routes
@@ -57,6 +58,12 @@ const GamesIndexLazyRoute = GamesIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/games/index.lazy').then((d) => d.Route))
 
+const FriendsIndexLazyRoute = FriendsIndexLazyImport.update({
+  id: '/friends/',
+  path: '/friends/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/friends/index.lazy').then((d) => d.Route))
+
 const AdminIndexLazyRoute = AdminIndexLazyImport.update({
   id: '/admin/',
   path: '/admin/',
@@ -79,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/friends/': {
+      id: '/friends/'
+      path: '/friends'
+      fullPath: '/friends'
+      preLoaderRoute: typeof FriendsIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/games/': {
@@ -117,6 +131,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/admin': typeof AdminIndexLazyRoute
+  '/friends': typeof FriendsIndexLazyRoute
   '/games': typeof GamesIndexLazyRoute
   '/library': typeof LibraryIndexLazyRoute
   '/profile': typeof ProfileIndexLazyRoute
@@ -126,6 +141,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/admin': typeof AdminIndexLazyRoute
+  '/friends': typeof FriendsIndexLazyRoute
   '/games': typeof GamesIndexLazyRoute
   '/library': typeof LibraryIndexLazyRoute
   '/profile': typeof ProfileIndexLazyRoute
@@ -136,6 +152,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/admin/': typeof AdminIndexLazyRoute
+  '/friends/': typeof FriendsIndexLazyRoute
   '/games/': typeof GamesIndexLazyRoute
   '/library/': typeof LibraryIndexLazyRoute
   '/profile/': typeof ProfileIndexLazyRoute
@@ -144,13 +161,28 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/games' | '/library' | '/profile' | '/topRated'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/friends'
+    | '/games'
+    | '/library'
+    | '/profile'
+    | '/topRated'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/games' | '/library' | '/profile' | '/topRated'
+  to:
+    | '/'
+    | '/admin'
+    | '/friends'
+    | '/games'
+    | '/library'
+    | '/profile'
+    | '/topRated'
   id:
     | '__root__'
     | '/'
     | '/admin/'
+    | '/friends/'
     | '/games/'
     | '/library/'
     | '/profile/'
@@ -161,6 +193,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AdminIndexLazyRoute: typeof AdminIndexLazyRoute
+  FriendsIndexLazyRoute: typeof FriendsIndexLazyRoute
   GamesIndexLazyRoute: typeof GamesIndexLazyRoute
   LibraryIndexLazyRoute: typeof LibraryIndexLazyRoute
   ProfileIndexLazyRoute: typeof ProfileIndexLazyRoute
@@ -170,6 +203,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AdminIndexLazyRoute: AdminIndexLazyRoute,
+  FriendsIndexLazyRoute: FriendsIndexLazyRoute,
   GamesIndexLazyRoute: GamesIndexLazyRoute,
   LibraryIndexLazyRoute: LibraryIndexLazyRoute,
   ProfileIndexLazyRoute: ProfileIndexLazyRoute,
@@ -188,6 +222,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/admin/",
+        "/friends/",
         "/games/",
         "/library/",
         "/profile/",
@@ -199,6 +234,9 @@ export const routeTree = rootRoute
     },
     "/admin/": {
       "filePath": "admin/index.lazy.tsx"
+    },
+    "/friends/": {
+      "filePath": "friends/index.lazy.tsx"
     },
     "/games/": {
       "filePath": "games/index.lazy.tsx"

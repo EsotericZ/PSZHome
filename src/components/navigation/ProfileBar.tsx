@@ -10,21 +10,11 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 
-interface User {
-  avatar?: string;
-  name: string;
-}
-
-const user: User = {
-  avatar: '',
-  name: 'CJ',
-}
-
 const ProfileBar = () => {
   const { logout } = useAuth0();
   const { dispatch, state } = useUserContext();
   const [open, setOpen] = useState(false);
-  const firstLetter = user.name.charAt(0).toUpperCase();
+  const firstLetter = state.email?.charAt(0).toUpperCase();
 
   const handleLogout = () => {
     logout({ logoutParams: { returnTo: window.location.origin } });
@@ -61,10 +51,10 @@ const ProfileBar = () => {
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
         icon={
-          user.avatar ? (
+          state.psnAvatar ? (
             <Box
               component='img'
-              src={user.avatar}
+              src={state.psnAvatar}
               alt='User Avatar'
               sx={{ 
                 width: '100%', 
