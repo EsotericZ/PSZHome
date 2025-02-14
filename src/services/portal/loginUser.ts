@@ -8,7 +8,7 @@ interface LoginResponse {
 }
 
 const loginUser = async (email: string, token: string): Promise<LoginResponse> => {
-  const res = await api.post<LoginResponse>(
+  const response = await api.post<LoginResponse>(
     '/portal', 
     { email },
     {
@@ -18,11 +18,11 @@ const loginUser = async (email: string, token: string): Promise<LoginResponse> =
     }
   );
 
-  if (res.data.refreshToken) {
-    localStorage.setItem('pszRefreshToken', res.data.refreshToken);
+  if (response.data.refreshToken) {
+    localStorage.setItem('pszRefreshToken', response.data.refreshToken);
   };
 
-  return res.data;
+  return response.data;
 };
 
 export default loginUser;
