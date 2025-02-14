@@ -5,7 +5,7 @@ const darkTheme = {
   background: '#1E1E1E',
   text: '#EFE4D3',
   iconActive: '#E673CF',
-  iconInactive: '#2D2D2D',
+  iconInactive: '#424242',
   button: '#6A0DAD',
   primary: '#6A0DAD',
   secondary: '#F5C518',
