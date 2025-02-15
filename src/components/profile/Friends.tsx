@@ -7,7 +7,7 @@ import FriendProps from '../../types/FriendTypes';
 import LoadSymbol from '../shared/LoadSymbol';
 
 import getAllUserFriends from '../../services/friends/getAllUserFriends';
-import getPSNUserFriends from '../../services/psn/getPSNUserFriends';
+import updateUserPSN from '../../services/psn/updateUserPSN';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const Friends = () => {
@@ -41,7 +41,7 @@ const Friends = () => {
 
     setUpdating(true);
     try {
-      await getPSNUserFriends(apiPrivate, state.id);
+      await updateUserPSN(apiPrivate, state.id);
       await fetchData();
     } catch (error) {
       console.error(error);
