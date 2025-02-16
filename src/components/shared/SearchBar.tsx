@@ -1,5 +1,7 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { TextField, Box } from '@mui/material';
+
+import { ThemeContext } from '../../context/ThemeContext';
 
 interface SearchBarProps {
   value: string;
@@ -8,10 +10,17 @@ interface SearchBarProps {
 }
 
 const SearchBar: FC<SearchBarProps> = ({ value, onChange, placeholder = 'Search...' }) => {
+  const themeContext = useContext(ThemeContext);
+  
+  if (!themeContext) {
+    throw new Error('ThemeContext must be used within a ThemeProvider');
+  }
+
+  const { theme } = themeContext;
+
   return (
     <Box 
       sx={{ 
-        my: 2, 
         width: '500px'
       }}
     >
@@ -27,13 +36,13 @@ const SearchBar: FC<SearchBarProps> = ({ value, onChange, placeholder = 'Search.
           },
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
-              borderColor: 'white',
+              borderColor: theme.iconInactive,
             },
             '&:hover fieldset': {
-              borderColor: 'white',
+              borderColor: theme.iconInactive,
             },
             '&.Mui-focused fieldset': {
-              borderColor: 'white',
+              borderColor: theme.iconInactive,
             },
           },
           '& .MuiInputLabel-root': {
