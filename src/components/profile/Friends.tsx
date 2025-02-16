@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material';
 
 import { useUserContext } from '../../context/UserContext';
 
+import FriendCard from './FriendCard';
 import FriendProps from '../../types/FriendTypes';
 import LoadSymbol from '../shared/LoadSymbol';
 import UpdatePSNButton from './UpdatePSNButton';
@@ -46,14 +47,29 @@ const Friends: FC = () => {
           <LoadSymbol />
         ) : (
           <>
-            <Typography>Friends</Typography>
-            <UpdatePSNButton
-              userId={state.id}
-              fetchData={fetchData}
-            />
-            {friendList.map((friend, index) => (
-              <p key={index}>{friend.pszUser ? 'Y' : 'N'} {friend.username}</p>
-            ))}
+            <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
+              <UpdatePSNButton
+                userId={state.id}
+                fetchData={fetchData}
+              />
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 2,
+                justifyContent: "center",
+                alignItems: "center",
+                maxWidth: "1000px",
+                margin: "0 auto",
+              }}
+            >
+              {friendList.map((friend, index) => (
+                <Box key={index} sx={{ flex: '1 1 250px', maxWidth: '300px' }}>
+                  <FriendCard friend={friend} />
+                </Box>
+              ))}
+            </Box>
           </>
         )}
       </Box>

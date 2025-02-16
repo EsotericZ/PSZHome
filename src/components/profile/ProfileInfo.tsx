@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Box } from '@mui/material';
 import { useUserContext } from '../../context/UserContext';
 
 import ProfileCard from './ProfileCard';
@@ -10,9 +11,11 @@ const ProfileInfo: FC = () => {
   return (
     <>
       {state.verified && (
-        <UpdatePSNButton
-          userId={state.id}
-        />
+        <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
+          <UpdatePSNButton
+            userId={state.id}
+          />
+        </Box>
       )}
       <ProfileCard />
     </>

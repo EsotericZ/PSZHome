@@ -4,7 +4,6 @@ import { Box, Tab, Tabs } from '@mui/material';
 import { styled } from '@mui/system';
 
 import { ThemeContext } from '../../context/ThemeContext';
-import { useUserContext } from '../../context/UserContext';
 
 import Friends from '../../components/profile/Friends';
 import GameHelp from '../../components/profile/GameHelp';
@@ -15,7 +14,6 @@ export const Route = createLazyFileRoute('/profile/')({
 });
 
 function Profile() {
-  const { state } = useUserContext();
   const themeContext = useContext(ThemeContext);
   
   if (!themeContext) {
@@ -46,24 +44,20 @@ function Profile() {
   });
 
   return (
-    state.verified ? (
-      <Box sx={{ maxWidth: 600, margin: 'auto', p: 3 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3 }}>
+      <Box sx={{ maxWidth: 600, width: '100%' }}>
         <StyledTabs value={tab} onChange={(_, newValue) => setTab(newValue)} centered>
           <StyledTab label='Profile' />
           <StyledTab label='Friends' />
           <StyledTab label='Game Help' />
         </StyledTabs>
+      </Box>
 
-        <Box sx={{ mt: 3 }}>
-          {tab === 0 && <ProfileInfo />}
-          {tab === 1 && <Friends />}
-          {tab === 2 && <GameHelp />}
-        </Box>
+      <Box sx={{ width: '90%', maxWidth: '1200px', mt: 3 }}>
+        {tab === 0 && <ProfileInfo />}
+        {tab === 1 && <Friends />}
+        {tab === 2 && <GameHelp />}
       </Box>
-    ) : (
-      <Box>
-        <h3>Verify Your Profile To Use This Feature</h3>
-      </Box>
-    )
+    </Box>
   );
 }
