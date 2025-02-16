@@ -1,19 +1,18 @@
-import { useEffect, useState } from 'react';
-import { Box, Button, CircularProgress, Typography } from '@mui/material';
+import { FC, useEffect, useState } from 'react';
+import { Box, Typography } from '@mui/material';
 
 import { useUserContext } from '../../context/UserContext';
 
 import FriendProps from '../../types/FriendTypes';
 import LoadSymbol from '../shared/LoadSymbol';
+import UpdatePSNButton from './UpdatePSNButton';
 
 import getAllUserFriends from '../../services/friends/getAllUserFriends';
-import updateUserPSN from '../../services/psn/updateUserPSN';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
-const Friends = () => {
+const Friends: FC = () => {
   const [friendList, setFriendList] = useState<FriendProps[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [updating, setUpdating] = useState<boolean>(false);
   const { state } = useUserContext();
   const apiPrivate = useAxiosPrivate();
 
@@ -33,23 +32,6 @@ const Friends = () => {
     }
   }
 
-  const updateFriendsPSN = async () => {
-    if (!state.id) {
-      console.warn('UserID Not Available');
-      return;
-    }
-
-    setUpdating(true);
-    try {
-      await updateUserPSN(apiPrivate, state.id);
-      await fetchData();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setUpdating(false);
-    }
-  }
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -62,15 +44,10 @@ const Friends = () => {
         ) : (
           <>
             <Typography>Friends</Typography>
-            <Button
-              variant='contained'
-              color='primary'
-              onClick={updateFriendsPSN}
-              disabled={updating}
-              sx={{ mb: 2 }}
-            >
-              {updating ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Update'}
-            </Button>
+            <UpdatePSNButton
+              userId={state.id}
+              fetchData={fetchData}
+            />
             {friendList.map((friend, index) => (
               <p key={index}>{friend.pszUser ? 'Y' : 'N'} {friend.username}</p>
             ))}
