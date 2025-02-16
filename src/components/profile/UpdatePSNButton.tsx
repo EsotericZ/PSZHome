@@ -4,13 +4,16 @@ import { Button, CircularProgress } from '@mui/material';
 import updateUserPSN from '../../services/psn/updateUserPSN';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
+import { useUserContext } from '../../context/UserContext';
+
 interface UpdatePSNButtonProps {
   userId: string | null;
-  fetchData: () => Promise<void>;
+  fetchData?: () => Promise<{ psnAvatar?: string | null; psnPlus?: boolean }>;
 }
 
 const UpdatePSNButton: FC<UpdatePSNButtonProps> = ({ userId, fetchData }) => {
   const [updating, setUpdating] = useState<boolean>(false);
+  const { dispatch } = useUserContext();
   const apiPrivate = useAxiosPrivate();
 
   const updateFriendsPSN = async () => {
@@ -22,7 +25,20 @@ const UpdatePSNButton: FC<UpdatePSNButtonProps> = ({ userId, fetchData }) => {
     setUpdating(true);
     try {
       await updateUserPSN(apiPrivate, userId);
-      await fetchData();
+      
+      if (fetchData) {
+        const updatedData = await fetchData();
+
+        if (updatedData.psnAvatar || updatedData.psnPlus !== undefined) {
+          dispatch({
+            type: 'SET_USER',
+            payload: {
+              psnAvatar: updatedData.psnAvatar,
+              psnPlus: updatedData.psnPlus,
+            },
+          });
+        }
+      }
     } catch (error) {
       console.error(error);
     } finally {

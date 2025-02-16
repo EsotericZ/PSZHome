@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Avatar, Box, Button, Card, Modal, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 
+import { ThemeContext } from '../../context/ThemeContext';
 import { useUserContext } from '../../context/UserContext';
 
 const ProfileContainer = styled(Card)(({ theme }) => ({
@@ -25,7 +26,7 @@ const AvatarContainer = styled(Box)({
 
 const StyledAvatar = styled(Avatar)({
   width: 'auto', 
-  height: '150px',
+  height: '180px',
 });
 
 const UserDetails = styled(Box)({
@@ -55,6 +56,7 @@ interface UserState {
   role: number;
   email: string;
   verified: boolean;
+  accountLevel: string;
 }
 
 const getRoleText = (role: number): string => {
@@ -71,8 +73,15 @@ const getRoleText = (role: number): string => {
 };
 
 const ProfileCard = () => {
-  const { state } = useUserContext() as { state: UserState }; // Ensure type safety
+  const { state } = useUserContext() as { state: UserState };
   const [open, setOpen] = useState<boolean>(false);
+  const themeContext = useContext(ThemeContext);
+
+  if (!themeContext) {
+    throw new Error('ThemeContext must be used within a ThemeProvider');
+  }
+
+  const { theme } = themeContext;
 
   return (
     <>
@@ -91,8 +100,25 @@ const ProfileCard = () => {
           <Typography variant='body1'>
             {getRoleText(state.role)}
           </Typography>
-          <Typography variant='body2' sx={{ mb: 1 }}>
+          <Typography variant='body1'>
             {state.email}
+          </Typography>
+          <Typography variant='body1' sx={{ mb: 1 }}>
+            {state.accountLevel.charAt(0).toUpperCase() + state.accountLevel.slice(1)} Account  
+            {state.accountLevel === 'standard' && (
+              <a 
+                href='/upgrade' 
+                style={{ 
+                  marginLeft: '16px', 
+                  color: theme.danger, 
+                  textDecoration: 'none', 
+                  cursor: 'pointer',
+                  fontStyle: 'italic',
+                }}
+              >
+                Upgrade
+              </a>
+            )}
           </Typography>
           {state.verified ? (
             <VerifiedIcon>

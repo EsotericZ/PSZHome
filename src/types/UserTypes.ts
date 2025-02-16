@@ -8,6 +8,7 @@ interface UserProps {
   psnAccountId?: string;
   psnAvatar?: string;
   psnPlus: boolean;
+  accountLevel: string;
   createdAt: string;
 }
 

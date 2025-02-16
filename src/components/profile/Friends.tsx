@@ -16,17 +16,20 @@ const Friends: FC = () => {
   const { state } = useUserContext();
   const apiPrivate = useAxiosPrivate();
 
-  const fetchData = async () => {
+  const fetchData = async (): Promise<{ psnAvatar?: string | null; psnPlus?: boolean }> => {
     if (!state.id) {
       console.warn('UserID Not Available');
-      return;
+      return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
     }
 
     try {
       const friendData = await getAllUserFriends(apiPrivate, state.id);
       setFriendList(friendData);
+
+      return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
     } catch (error) {
       console.error(error);
+      return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
     } finally {
       setLoading(false);
     }

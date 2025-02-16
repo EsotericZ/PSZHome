@@ -8,6 +8,7 @@ interface UserState {
   verified: boolean;
   psnAvatar: string | null;
   psnPlus: boolean;
+  accountLevel: 'standard' | 'premium';
 }
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   verified: false,
   psnAvatar: null,
   psnPlus: false,
+  accountLevel: 'standard',
 }
 
 type UserAction =
@@ -41,6 +43,7 @@ const userReducer = (state: UserState, action: UserAction): UserState => {
         verified: false,
         psnAvatar: null,
         psnPlus: false,
+        accountLevel: 'standard',
       };
     default:
       return state;

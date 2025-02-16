@@ -1,14 +1,21 @@
-// import { Box } from '@mui/material';
-
-// import { useUserContext } from '../../context/UserContext';
+import { FC } from 'react';
+import { useUserContext } from '../../context/UserContext';
 
 import ProfileCard from './ProfileCard';
+import UpdatePSNButton from './UpdatePSNButton';
 
-const ProfileInfo = () => {
-  // const { state } = useUserContext();
+const ProfileInfo: FC = () => {
+  const { state } = useUserContext();
 
   return (
-    <ProfileCard />
+    <>
+      {state.verified && (
+        <UpdatePSNButton
+          userId={state.id}
+        />
+      )}
+      <ProfileCard />
+    </>
   )
 }
 
