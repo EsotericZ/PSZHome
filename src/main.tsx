@@ -5,6 +5,7 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from './context/ThemeContext';
 import { UserProvider } from './context/UserContext';
 import App from './App';
+import './global.css';
 
 const domain = import.meta.env.VITE_AUTH0_DOMAIN;
 const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
