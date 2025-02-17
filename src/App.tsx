@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const router = createRouter({ 
   routeTree,
@@ -15,7 +17,10 @@ declare module '@tanstack/react-router' {
 
 const App: FC = () => {
   return (
-    <RouterProvider router={router} />
+    <>
+      <ToastContainer position='bottom-right' autoClose={3000} />
+      <RouterProvider router={router} />
+    </>
   )
 }
 

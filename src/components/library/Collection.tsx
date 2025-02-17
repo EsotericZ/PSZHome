@@ -34,7 +34,6 @@ const Collection: FC = () => {
     try {
       const gameData = await getAllUserCollection(apiPrivate, state.id);
       setGamesList(gameData)
-      console.log(gameData)
 
       return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
     } catch (error) {
@@ -92,9 +91,8 @@ const Collection: FC = () => {
               }}
             >
               {filteredGames.map((game, index) => (
-                <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                <Box key={index} sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                   <CollectionCard
-                    key={index}
                     game={game}
                     expandedCardId={expandedCardId} 
                     setExpandedCardId={setExpandedCardId}

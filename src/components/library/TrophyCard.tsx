@@ -36,7 +36,16 @@ const TrophyIcon = {
 const TrophyCard: FC<TrophyCardProps> = ({ trophy }) => {
   return (
     <TrophyContainer>
-      <Avatar src={trophy.image} variant="square" sx={{ width: 48, height: 48, borderRadius: '8px' }} />
+      <Avatar 
+        src={trophy.image} 
+        variant="square" 
+        sx={{ 
+          width: 48, 
+          height: 48, 
+          borderRadius: '8px',
+          opacity: trophy.earned ? 1 : 0.4
+        }} 
+      />
   
       <Typography sx={{ flex: 2, ml: 2, minWidth: 150 }}>{trophy.name}</Typography>
   

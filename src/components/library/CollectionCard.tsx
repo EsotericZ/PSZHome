@@ -101,9 +101,9 @@ const CollectionCard: FC<CollectionCardProps> = ({ game, expandedCardId, setExpa
             alignItems: 'center',
             flex: 1,
             minWidth: 200,
-            flexDirection: 'row', // ✅ Forces platinum to stay beside progress on all screens
-            gap: { xs: 2, md: 3 }, // ✅ Ensures spacing remains consistent
-            justifyContent: { xs: 'center', md: 'flex-start' }, // ✅ Centers content on mobile
+            flexDirection: 'row',
+            gap: { xs: 2, md: 3 },
+            justifyContent: { xs: 'center', md: 'flex-start' }, 
           }}
         >
           <Box
@@ -208,8 +208,11 @@ const CollectionCard: FC<CollectionCardProps> = ({ game, expandedCardId, setExpa
             padding: '8px 16px',
           }}
         >
-          {game.trophies.map((trophy) => (
-            <TrophyCard key={trophy.id} trophy={trophy} />
+          {game.trophies.map((trophy, index) => (
+            <TrophyCard 
+              key={index} 
+              trophy={trophy} 
+            />
           ))}
         </Box>
       )}

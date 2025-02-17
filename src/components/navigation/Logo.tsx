@@ -5,16 +5,16 @@ const Logo = () => {
   return (
     <Box
       sx={{
-        position: 'absolute',
+        position: 'relative',
         top: 16,
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 1200,
       }}
     >
-      <Typography 
+      <Typography
         variant='h3'
-        onClick={() => {router.navigate({ to: '/' })}}
+        onClick={() => { router.navigate({ to: '/' }) }}
         sx={{
           cursor: 'pointer'
         }}
