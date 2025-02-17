@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Avatar, Box, Button, Card, Modal, Typography } from '@mui/material';
+import { Avatar, Box, Button, Card, Modal, Typography, useMediaQuery } from '@mui/material';
 import { styled } from '@mui/system';
 
 import { ThemeContext } from '../../context/ThemeContext';
@@ -76,6 +76,7 @@ const ProfileCard = () => {
   const { state } = useUserContext() as { state: UserState };
   const [open, setOpen] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   if (!themeContext) {
     throw new Error('ThemeContext must be used within a ThemeProvider');
@@ -86,9 +87,11 @@ const ProfileCard = () => {
   return (
     <>
       <ProfileContainer>
-        <AvatarContainer>
-          <StyledAvatar src={state.psnAvatar} variant='square' />
-        </AvatarContainer>
+        {!isMobile && (
+          <AvatarContainer>
+            <StyledAvatar src={state.psnAvatar} variant='square' />
+          </AvatarContainer>
+        )}
         <UserDetails>
           <Typography 
             variant='h5' 

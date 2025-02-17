@@ -21,7 +21,9 @@ const SearchBar: FC<SearchBarProps> = ({ value, onChange, placeholder = 'Search.
   return (
     <Box 
       sx={{ 
-        width: '500px'
+        width: { xs: '90%', sm: '400px', md: '500px' },
+        maxWidth: '500px',
+        mx: 'auto',
       }}
     >
       <TextField

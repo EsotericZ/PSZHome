@@ -19,7 +19,7 @@ const Logo = () => {
           cursor: 'pointer'
         }}
       >
-        PSZ Reviews
+        PSZ
       </Typography>
     </Box>
   );
