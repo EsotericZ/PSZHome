@@ -88,7 +88,6 @@ const Collection: FC = () => {
                 maxWidth: '100%',
                 margin: '0 auto',
                 px: 2,
-                border: '1px solid white'
               }}
             >
               {filteredGames.map((game, index) => (

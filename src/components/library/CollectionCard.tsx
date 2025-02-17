@@ -39,74 +39,73 @@ const TrophyIcon = styled(Avatar)({
 const CollectionCard: FC<CollectionCardProps> = ({ game }) => {
   return (
     <StyledCard sx={{ display: 'flex', alignItems: 'center' }}>
-  
-  <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 250, maxWidth: 300 }}> 
-    <Avatar
-      src={game.image}
-      variant='square'
-      sx={{ width: 64, height: 64, borderRadius: '8px', mr: 2 }}
-    />
-    <Typography 
-      variant='h6' 
-      fontWeight='bold' 
-      sx={{ 
-        whiteSpace: 'normal',
-        overflow: 'hidden',
-        display: '-webkit-box',
-        WebkitBoxOrient: 'vertical',
-        WebkitLineClamp: 2,
-      }}
-    >
-      {game.name}
-    </Typography>
-  </Box>
 
-  <Box sx={{ flex: 1 }} />
+      <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 250, maxWidth: 300 }}>
+        <Avatar
+          src={game.image}
+          variant='square'
+          sx={{ width: 64, height: 64, borderRadius: '8px', mr: 2 }}
+        />
+        <Typography
+          variant='h6'
+          fontWeight='bold'
+          sx={{
+            whiteSpace: 'normal',
+            overflow: 'hidden',
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: 2,
+          }}
+        >
+          {game.name}
+        </Typography>
+      </Box>
 
-  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, minWidth: 200 }}>
-    <Box sx={{ width: '100%' }}>
-      <LinearProgress
-        variant='determinate'
-        value={game.progress}
-        sx={{ width: '100%', height: 8, borderRadius: '4px', backgroundColor: '#444' }}
-      />
-    </Box>
-    <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 1 }}>
-      <TrophyIcon src={goldTrophyIcon} />
-      <Typography>{game.earnedTrophies.gold}</Typography>
+      <Box sx={{ flex: 1 }} />
 
-      <TrophyIcon src={silverTrophyIcon} />
-      <Typography>{game.earnedTrophies.silver}</Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 200 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 200 }}>
+          <LinearProgress
+            variant="determinate"
+            value={game.progress}
+            sx={{ width: '100%', height: 8, borderRadius: '4px', backgroundColor: '#444' }}
+          />
+          <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 1 }}>
+            <TrophyIcon src={goldTrophyIcon} />
+            <Typography>{game.earnedTrophies.gold}</Typography>
 
-      <TrophyIcon src={bronzeTrophyIcon} />
-      <Typography>{game.earnedTrophies.bronze}</Typography>
-    </Box>
-  </Box>
+            <TrophyIcon src={silverTrophyIcon} />
+            <Typography>{game.earnedTrophies.silver}</Typography>
 
-  <Box sx={{ flex: 1 }} />
+            <TrophyIcon src={bronzeTrophyIcon} />
+            <Typography>{game.earnedTrophies.bronze}</Typography>
+          </Box>
+        </Box>
 
-  <Box sx={{ flex: 1, textAlign: 'center', minWidth: 80 }}>
-    {game.platinum ? (
-      <TrophyIcon src={platinumTrophyIcon} />
-    ) : (
-      <Typography fontSize={20} color='gray'>X</Typography>
-    )}
-  </Box>
+        <Box sx={{ ml: 3, textAlign: 'center' }}>
+          {game.platinum ? (
+            <TrophyIcon src={platinumTrophyIcon} />
+          ) : (
+            <Typography fontSize={20} color="gray">X</Typography>
+          )}
+        </Box>
+      </Box>
 
-  <Box sx={{ flex: 1 }} />
 
-  <Box sx={{ flex: 1, textAlign: 'center', minWidth: 100 }}>
-    <Typography>{game.status}</Typography>
-  </Box>
+      <Box sx={{ flex: 1 }} />
 
-  <Box sx={{ flex: 1 }} />
+      <Box sx={{ flex: 1, textAlign: 'center', minWidth: 100 }}>
+        <Typography>{game.status}</Typography>
+      </Box>
 
-  <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-end', minWidth: 120 }}>
-    <Typography color='gray'>Not Rated</Typography>
-    <ExpandMoreIcon sx={{ cursor: 'pointer', color: 'white', ml: 1 }} />
-  </Box>
+      <Box sx={{ flex: 1 }} />
 
-</StyledCard>
+      <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-end', minWidth: 120 }}>
+        <Typography color='gray'>Not Rated</Typography>
+        <ExpandMoreIcon sx={{ cursor: 'pointer', color: 'white', ml: 1 }} />
+      </Box>
+
+    </StyledCard>
 
 
 
