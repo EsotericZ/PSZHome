@@ -6,42 +6,47 @@ import { useUserContext } from '../../context/UserContext';
 import LoadSymbol from '../shared/LoadSymbol';
 import SearchBar from '../shared/SearchBar';
 import UpdatePSNButton from '../profile/UpdatePSNButton';
+import CollectionProps from '../../types/CollectionTypes';
+import CollectionCard from './CollectionCard';
 
+import getAllUserCollection from '../../services/library/getAllUserCollection';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
-const PSLibrary: FC = () => {
+const Collection: FC = () => {
+  const [gamesList, setGamesList] = useState<CollectionProps[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const { state } = useUserContext();
   const apiPrivate = useAxiosPrivate();
   const isMobile = useMediaQuery('(max-width:600px)');
 
-  // const filteredGames = gamesList.filter((game) =>
-  //   game.username.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+  const filteredGames = gamesList.filter((game) =>
+    game.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  // const fetchData = async (): Promise<{ psnAvatar?: string | null; psnPlus?: boolean }> => {
-  //   if (!state.id) {
-  //     console.warn('UserID Not Available');
-  //     return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
-  //   }
+  const fetchData = async () => {
+    if (!state.id) {
+      console.warn('UserID Not Available');
+      return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
+    }
 
-  //   try {
-  //     const friendData = await getAllUserFriends(apiPrivate, state.id);
-  //     setFriendList(friendData);
+    try {
+      const gameData = await getAllUserCollection(apiPrivate, state.id);
+      setGamesList(gameData)
+      console.log(gameData)
 
-  //     return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
-  //   } catch (error) {
-  //     console.error(error);
-  //     return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
+      return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
+    } catch (error) {
+      console.error(error);
+      return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
+    } finally {
+      setLoading(false);
+    }
+  }
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     state.verified ? (
@@ -70,26 +75,30 @@ const PSLibrary: FC = () => {
               <Box sx={{ mt: isMobile ? 0 : 2 }}>
                 <UpdatePSNButton
                   userId={state.id}
-                  // fetchData={fetchData}
+                  fetchData={fetchData}
                 />
               </Box>
             </Box>
             <Box
               sx={{
                 display: 'flex',
-                flexWrap: 'wrap',
-                gap: 2,
-                justifyContent: 'center',
+                flexDirection: 'column',
                 alignItems: 'center',
-                maxWidth: '1000px',
+                width: '100vw',
+                maxWidth: '100%',
                 margin: '0 auto',
+                px: 2,
+                border: '1px solid white'
               }}
             >
-              {/* {filteredFriends.map((friend, index) => (
-                <Box key={index} sx={{ flex: '1 1 275px', maxWidth: '300px' }}>
-                  <FriendCard friend={friend} />
+              {filteredGames.map((game, index) => (
+                <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                  <CollectionCard
+                    key={index}
+                    game={game}
+                  />
                 </Box>
-              ))} */}
+              ))}
             </Box>
           </>
         )}
@@ -102,4 +111,4 @@ const PSLibrary: FC = () => {
   )
 }
 
-export default PSLibrary;
+export default Collection;

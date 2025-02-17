@@ -13,7 +13,7 @@ function LoadSymbol() {
       }}
     >
       <PuffLoader
-        color='white'
+        color='#EFE4D3'
       />
     </Box>
 

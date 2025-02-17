@@ -4,10 +4,9 @@ import { Box, Tab, Tabs, useMediaQuery } from '@mui/material';
 import { styled } from '@mui/system';
 
 import { ThemeContext } from '../../context/ThemeContext';
-import { useUserContext } from '../../context/UserContext';
 
 import Backlog from '../../components/library/Backlog';
-import PSLibrary from '../../components/library/PSLibrary';
+import Collection from '../../components/library/Collection';
 import Wishlist from '../../components/library/Wishlist';
 
 export const Route = createLazyFileRoute('/library/')({
@@ -15,7 +14,6 @@ export const Route = createLazyFileRoute('/library/')({
 })
 
 function Library() {
-  const { state } = useUserContext();
   const themeContext = useContext(ThemeContext);
 
   if (!themeContext) {
@@ -62,7 +60,7 @@ function Library() {
       </Box>
   
       <Box sx={{ width: '90%', maxWidth: '1200px', mt: 3 }}>
-        {tab === 0 && <PSLibrary />}
+        {tab === 0 && <Collection />}
         {tab === 1 && <Backlog />}
         {tab === 2 && <Wishlist />}
       </Box>
