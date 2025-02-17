@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Avatar, Box, Card, LinearProgress, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 
@@ -14,6 +14,8 @@ import silverTrophyIcon from '../../../assets/trophies/silver.png';
 
 interface CollectionCardProps {
   game: CollectionProps;
+  expandedCardId: string | null;
+  setExpandedCardId: (id: string | null) => void;
 }
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -43,8 +45,8 @@ const TrophyIcon = styled(Avatar)({
   marginRight: 4,
 });
 
-const CollectionCard: FC<CollectionCardProps> = ({ game }) => {
-  const [expanded, setExpanded] = useState<boolean>(false);
+const CollectionCard: FC<CollectionCardProps> = ({ game, expandedCardId, setExpandedCardId }) => {
+  const expanded = expandedCardId === game.id;
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -99,8 +101,9 @@ const CollectionCard: FC<CollectionCardProps> = ({ game }) => {
             alignItems: 'center',
             flex: 1,
             minWidth: 200,
-            flexDirection: { xs: 'column', md: 'row' },
-            gap: { xs: 1, md: 0 },
+            flexDirection: 'row', // ✅ Forces platinum to stay beside progress on all screens
+            gap: { xs: 2, md: 3 }, // ✅ Ensures spacing remains consistent
+            justifyContent: { xs: 'center', md: 'flex-start' }, // ✅ Centers content on mobile
           }}
         >
           <Box
@@ -114,7 +117,7 @@ const CollectionCard: FC<CollectionCardProps> = ({ game }) => {
             }}
           >
             <LinearProgress
-              variant='determinate'
+              variant="determinate"
               value={game.progress}
               sx={{
                 width: '100%',
@@ -145,17 +148,17 @@ const CollectionCard: FC<CollectionCardProps> = ({ game }) => {
 
           <Box
             sx={{
-              ml: { xs: 0, md: 3 },
               textAlign: 'center',
             }}
           >
             {game.platinum ? (
               <TrophyIcon src={platinumTrophyIcon} />
             ) : (
-              <Typography fontSize={20} color='gray'>X</Typography>
+              <Typography fontSize={20} color="gray">X</Typography>
             )}
           </Box>
         </Box>
+
 
         <Box sx={{ flex: 1 }} />
 
@@ -190,7 +193,7 @@ const CollectionCard: FC<CollectionCardProps> = ({ game }) => {
               ml: 1,
               mr: 0,
             }}
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => setExpandedCardId(expanded ? null : game.id)}
           />
         </Box>
       </StyledCard>

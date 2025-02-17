@@ -16,6 +16,7 @@ const Collection: FC = () => {
   const [gamesList, setGamesList] = useState<CollectionProps[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
+  const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const { state } = useUserContext();
   const apiPrivate = useAxiosPrivate();
   const isMobile = useMediaQuery('(max-width:600px)');
@@ -95,6 +96,8 @@ const Collection: FC = () => {
                   <CollectionCard
                     key={index}
                     game={game}
+                    expandedCardId={expandedCardId} 
+                    setExpandedCardId={setExpandedCardId}
                   />
                 </Box>
               ))}
