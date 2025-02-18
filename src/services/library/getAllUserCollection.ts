@@ -1,4 +1,4 @@
-import apiPrivate from "../../api/apiPrivate";
+import apiPrivate from '../../api/apiPrivate';
 
 const getAllUserCollection = async (AxiosInstance: typeof apiPrivate, id: string) => {
   try {

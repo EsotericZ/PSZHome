@@ -19,7 +19,7 @@ function RootComponent() {
   const isMobile = useMediaQuery('(max-width:600px)');
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', }}>
       <Navbar />
       <Logo />
       {isAuthenticated ? <ProfileBar /> : <LoginButton />}
@@ -29,9 +29,13 @@ function RootComponent() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
+          flexGrow: 1,
+          maxWidth: '1400px',
           width: '100%',
-          mt: '75px',
-          mx: isMobile ? 0 : '25px'
+          mx: 'auto', 
+          px: isMobile ? 2 : 4, 
+          mt: '25px',
+          border: '1px solid white'
         }}
       >
         <Outlet />
