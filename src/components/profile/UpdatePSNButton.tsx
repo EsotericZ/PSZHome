@@ -9,7 +9,7 @@ import { useUserContext } from '../../context/UserContext';
 
 interface UpdatePSNButtonProps {
   userId: string | null;
-  fetchData?: () => Promise<{ psnAvatar?: string | null; psnPlus?: boolean }>;
+  fetchData?: () => Promise<void>;
 }
 
 const UpdatePSNButton: FC<UpdatePSNButtonProps> = ({ userId, fetchData }) => {
@@ -58,20 +58,18 @@ const UpdatePSNButton: FC<UpdatePSNButtonProps> = ({ userId, fetchData }) => {
         }
         return;
       }
-  
+
+      dispatch({
+        type: 'SET_USER',
+        payload: {
+          psnAvatar: response.userData?.profile?.avatarUrls?.[0]?.avatarUrl || state.psnAvatar,
+          psnPlus: response.userData?.profile?.plus === 1,
+        },
+      });
+    
       if (fetchData) {
-        const updatedData = await fetchData();
-        if (updatedData.psnAvatar || updatedData.psnPlus !== undefined) {
-          dispatch({
-            type: 'SET_USER',
-            payload: {
-              psnAvatar: updatedData.psnAvatar,
-              psnPlus: updatedData.psnPlus,
-            },
-          });
-        }
+        await fetchData();
       }
-      
     } catch (error) {
       console.error(error);
       toast.error('Failed to update PSN data.');

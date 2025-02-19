@@ -25,20 +25,17 @@ const Collection: FC = () => {
     game.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const fetchData = async () => {
+  const fetchData = async (): Promise<void> => {
     if (!state.id) {
       console.warn('UserID Not Available');
-      return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
+      return;
     }
 
     try {
       const gameData = await getAllUserCollection(apiPrivate, state.id);
       setGamesList(gameData)
-
-      return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
     } catch (error) {
       console.error(error);
-      return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
     } finally {
       setLoading(false);
     }

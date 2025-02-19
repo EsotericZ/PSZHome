@@ -63,8 +63,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   );
 
   useEffect(() => {
-    localStorage.setItem('userState', JSON.stringify(state));
+    const saveState = setTimeout(() => {
+      localStorage.setItem('userState', JSON.stringify(state));
+    }, 100); 
+  
+    return () => clearTimeout(saveState);
   }, [state]);
+  
 
   return (
     <UserContext.Provider value={{ state, dispatch }}>

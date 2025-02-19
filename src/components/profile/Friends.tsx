@@ -24,20 +24,17 @@ const Friends: FC = () => {
     friend.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const fetchData = async (): Promise<{ psnAvatar?: string | null; psnPlus?: boolean }> => {
+  const fetchData = async (): Promise<void> => {
     if (!state.id) {
       console.warn('UserID Not Available');
-      return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
+      return;
     }
 
     try {
       const friendData = await getAllUserFriends(apiPrivate, state.id);
       setFriendList(friendData);
-
-      return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
     } catch (error) {
       console.error(error);
-      return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
     } finally {
       setLoading(false);
     }

@@ -13,7 +13,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 const ProfileBar = () => {
   const { logout } = useAuth0();
   const { dispatch, state } = useUserContext();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const firstLetter = state.email?.charAt(0).toUpperCase();
 
   const handleLogout = () => {
@@ -35,6 +35,7 @@ const ProfileBar = () => {
     >
       <Backdrop open={open} />
       <SpeedDial
+        key={state.psnAvatar}
         ariaLabel='SpeedDial'
         sx={{
           position: 'relative',

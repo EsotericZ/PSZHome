@@ -88,7 +88,6 @@ function Admin() {
   }
 
   const handleFeature = (game: FeaturedProps, index: number) => {
-    console.log(game);
     // patchFeaturedGames(axiosPrivate, game, `Featured Game ${index + 1}`);
     setFeaturedGames((prev) => {
       const updated = [...prev];
