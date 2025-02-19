@@ -2,13 +2,26 @@ import { useEffect, useState } from 'react';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { Box } from '@mui/material';
 
+import GameCard from '../../components/admin/GameCard';
 import LoadSymbol from '../../components/shared/LoadSymbol';
 import SearchBar from '../../components/shared/SearchBar';
 
 import searchGames from '../../services/igdb/searchGames';
 
 interface SearchGameProps {
+  id: string;
+  gameId: number;
   name: string;
+  cover?: string;
+  esrb?: string;
+  rating?: number;
+  released?: string;
+  slug?: string;
+  genres?: { id: number; name: string }[];
+  storyline?: string;
+  summary?: string;
+  pszRating?: number;
+  userRating?: { average: number; count: number };
 }
 
 export const Route = createLazyFileRoute('/games/')({
@@ -30,6 +43,7 @@ function Games() {
       setLoading(true);
       try {
         const gameData = await searchGames(game);
+        console.log(gameData)
         setSearchedGames(gameData);
       } catch (error) {
         console.error(error);
@@ -54,7 +68,10 @@ function Games() {
       ) : (
         <>
           {searchedGames.map((game, index) => (
-            <div key={index}>{game.name}</div>
+            <GameCard
+              key={index}
+              game={game}
+            />
           ))}
         </>
       )}

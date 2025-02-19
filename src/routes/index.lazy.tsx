@@ -39,6 +39,7 @@ function Index() {
   const fetchData = async () => {
     try {
       const featuredData = await getAllFeatured();
+      console.log(featuredData)
       const newFeatured = featuredData.find((item: any) => item.order === 1);
 
       const newBoxes = featuredData
