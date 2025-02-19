@@ -5,11 +5,10 @@ const Logo = () => {
   return (
     <Box
       sx={{
-        position: 'relative',
-        top: 16,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 1200,
+        display: 'flex', 
+        justifyContent: 'center', 
+        width: '100%', 
+        mt: 2, 
       }}
     >
       <Typography

@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Avatar, Box, Card, LinearProgress, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import CollectionProps from '../../types/CollectionTypes';
@@ -187,6 +188,7 @@ const CollectionCard: FC<CollectionCardProps> = ({ game, expandedCardId, setExpa
         >
           <Typography color='gray'>Not Rated</Typography>
           <ExpandMoreIcon
+            component={expanded ? ExpandLessIcon : ExpandMoreIcon}
             sx={{
               cursor: 'pointer',
               color: 'white',

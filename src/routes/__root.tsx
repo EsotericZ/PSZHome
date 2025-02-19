@@ -34,8 +34,6 @@ function RootComponent() {
           width: '100%',
           mx: 'auto', 
           px: isMobile ? 2 : 4, 
-          mt: '25px',
-          border: '1px solid white'
         }}
       >
         <Outlet />

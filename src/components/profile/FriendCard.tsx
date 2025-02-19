@@ -4,24 +4,24 @@ import { styled } from '@mui/system';
 
 import FriendProps from '../../types/FriendTypes';
 
-const FriendCardContainer = styled(Card)<{ faded: boolean; clickable: boolean }>(
-  ({ theme, faded, clickable }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    padding: '12px',
-    borderRadius: '8px',
-    boxShadow: (theme.shadows as unknown as string[])[2] ?? '0px 4px 6px rgba(0, 0, 0, 0.1)',
-    backgroundColor: faded ? theme.palette.grey[900] : theme.palette.grey[800],
-    color: theme.palette.text.primary,
-    transition: 'background-color 0.3s',
-    cursor: clickable ? 'pointer' : 'default',
-    ...(clickable && {
-      '&:hover': {
-        backgroundColor: theme.palette.grey[700], 
-      },
-    }),
-  })
-);
+const FriendCardContainer = styled(Card, {
+  shouldForwardProp: (prop) => prop !== 'faded' && prop !== 'clickable'
+})<{ faded: boolean; clickable: boolean }>(({ theme, faded, clickable }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: '12px',
+  borderRadius: '8px',
+  boxShadow: (theme.shadows as unknown as string[])[2] ?? '0px 4px 6px rgba(0, 0, 0, 0.1)',
+  backgroundColor: faded ? theme.palette.grey[900] : theme.palette.grey[800],
+  color: theme.palette.text.primary,
+  transition: 'background-color 0.3s',
+  cursor: clickable ? 'pointer' : 'default',
+  ...(clickable && {
+    '&:hover': {
+      backgroundColor: theme.palette.grey[700],
+    },
+  }),
+}));
 
 const FriendAvatar = styled(Avatar)({
   width: 48,
