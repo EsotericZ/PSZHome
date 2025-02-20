@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { Box } from '@mui/material';
 
-import GameCard from '../../components/admin/GameCard';
 import LoadSymbol from '../../components/shared/LoadSymbol';
 import SearchBar from '../../components/shared/SearchBar';
 
@@ -68,10 +67,7 @@ function Games() {
       ) : (
         <>
           {searchedGames.map((game, index) => (
-            <GameCard
-              key={index}
-              game={game}
-            />
+            <div key={index}>{game.name}</div>
           ))}
         </>
       )}
