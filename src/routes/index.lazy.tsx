@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createLazyFileRoute, Link } from '@tanstack/react-router';
 import { Box, Stack, useMediaQuery } from '@mui/material';
+import { useUserContext } from '../context/UserContext';
 
 import BoxItemFull from '../components/home/BoxItemFull';
 import BoxItemSmall from '../components/home/BoxItemSmall';
@@ -20,6 +21,7 @@ function Index() {
   const [loading, setLoading] = useState(true);
   const [featured, setFeatured] = useState<FeaturedProps>();
   const [boxes, setBoxes] = useState<FeaturedProps[]>([]);
+  const { state } = useUserContext();
 
   const sideBar = [
     {
@@ -37,8 +39,9 @@ function Index() {
   ];
 
   const fetchData = async () => {
+    console.log(state.id)
     try {
-      const featuredData = await getAllFeatured();
+      const featuredData = await getAllFeatured(state?.id ?? undefined);
       console.log(featuredData)
       const newFeatured = featuredData.find((item: any) => item.order === 1);
 
