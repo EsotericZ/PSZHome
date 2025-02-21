@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createLazyFileRoute, Link } from '@tanstack/react-router';
-import { Box, Stack, useMediaQuery } from '@mui/material';
+import { Box, IconButton, Stack, useMediaQuery } from '@mui/material';
+import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
+
 import { useUserContext } from '../context/UserContext';
 
-import BoxItemFull from '../components/home/BoxItemFull';
-import BoxItemSmall from '../components/home/BoxItemSmall';
-import Featured from '../components/home/Featured';
+import FeaturedCard from '../components/home/FeaturedCard';
 import FeaturedProps from '../types/FeaturedTypes';
 import LoadSymbol from '../components/shared/LoadSymbol';
-import SideBox from '../components/home/SideBox';
+import LinkBox from '../components/home/LinkBox';
 
 import getAllFeatured from '../services/home/getAllFeatured';
 
@@ -17,13 +17,17 @@ export const Route = createLazyFileRoute('/')({
 });
 
 function Index() {
-  const isMobile = useMediaQuery('(max-width:950px)');
-  const [loading, setLoading] = useState(true);
-  const [featured, setFeatured] = useState<FeaturedProps>();
-  const [boxes, setBoxes] = useState<FeaturedProps[]>([]);
+  const isMobile = useMediaQuery('(max-width: 950px)');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [featured, setFeatured] = useState<FeaturedProps[]>([]);
+  const carouselRef = useRef<HTMLDivElement>(null);
   const { state } = useUserContext();
 
-  const sideBar = [
+  const links = [
+    {
+      name: 'About',
+      link: '/topRated',
+    },
     {
       name: 'Top Rated',
       link: '/topRated',
@@ -33,26 +37,38 @@ function Index() {
       link: '/games',
     },
     {
-      name: 'PSZ Users',
+      name: 'Game Help',
       link: '/',
     },
   ];
 
+  const updateWishlist = () => {
+    console.log('hit wish')
+  };
+
+  const updateBacklog = () => {
+    console.log('hit back')
+  };
+
+  const openModal = () => {
+    console.log('hit open')
+  };
+
+  const scrollCarousel = (direction: 'left' | 'right') => {
+    if (carouselRef.current) {
+      const scrollAmount = 300;
+      carouselRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   const fetchData = async () => {
-    console.log(state.id)
     try {
       const featuredData = await getAllFeatured(state?.id ?? undefined);
       console.log(featuredData)
-      const newFeatured = featuredData.find((item: any) => item.order === 1);
-
-      const newBoxes = featuredData
-        .filter((item: any) => item.order > 1)
-        .sort((a: any, b: any) => a.order - b.order);
-
-      if (newFeatured) {
-        setFeatured(newFeatured);
-      }
-      setBoxes(newBoxes.map((item: any) => item));
+      setFeatured(featuredData);
     } catch (error) {
       console.error(error);
     } finally {
@@ -60,148 +76,72 @@ function Index() {
     }
   }
 
-  const handleBoxClick = (index: number) => {
-    if (!featured) return;
-
-    const newFeatured = boxes[index];
-    const newBoxes = boxes.map((box, i) =>
-      i === index ? featured : box
-    );
-
-    setFeatured(newFeatured);
-    setBoxes(newBoxes.sort((a, b) => a.order - b.order));
-  };
-
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 2,
-        width: '100%',
-        padding: 2,
-      }}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
-          gap: 2,
-        }}
-      >
-        <Box
-          sx={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
-          }}
-        >
+    <Box>
+    {loading ? (
+      <LoadSymbol />
+    ) : (
+      <Box sx={{ mt: 5, textAlign: 'center' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+          <IconButton onClick={() => scrollCarousel('left')} sx={{ color: '#fff' }}>
+            <ArrowBackIos />
+          </IconButton>
+
           <Box
+            ref={carouselRef}
             sx={{
-              position: 'relative',
-              width: '100%',
-              height: '100%',
-              overflow: 'hidden',
-              boxShadow: '0px 0px 8px 0px #E5E4E2',
-              borderRadius: '12px'
+              display: 'flex',
+              gap: 3,
+              overflowX: 'auto',
+              scrollBehavior: 'smooth',
+              whiteSpace: 'nowrap',
+              px: 1,
+              pb: 2,
+              maxWidth: '85vw',
+              overflow: 'visible'
             }}
           >
-
-            {loading ? (
-              <LoadSymbol />
-            ) : (
-              <Featured
-                featured={featured}
+            {featured.map((game) => (
+              <FeaturedCard
+                key={game.id}
+                game={game}
+                updateWishlist={() => {}}
+                updateBacklog={() => {}}
+                openModal={() => {}}
               />
-            )}
-          </Box>
-
-          <Box 
-            display='flex'
-            flexDirection={isMobile ? 'column' : 'row'} 
-            gap={2}
-          >
-            {boxes.map((box, index) => (
-              isMobile ? (
-                <Box
-                key={index}
-                sx={{
-                  flexGrow: 1,
-                }}
-              >
-                <BoxItemSmall
-                  key={index}
-                  box={box}
-                  index={index}
-                  handleBoxClick={handleBoxClick}
-                />
-                </Box>
-              ) : (
-                <BoxItemFull
-                  key={index}
-                  box={box} 
-                  index={index} 
-                  isMobile={isMobile} 
-                  loading={loading} 
-                  handleBoxClick={handleBoxClick}
-                />
-              )
             ))}
           </Box>
+
+          <IconButton onClick={() => scrollCarousel('right')} sx={{ color: '#fff' }}>
+            <ArrowForwardIos />
+          </IconButton>
         </Box>
 
-        {!isMobile && (
-          <Stack
-            spacing={2}
-            sx={{
-              flex: 0.15,
-            }}
-          >
-            {sideBar.map((item, index) => (
-              <Link
-                key={index}
-                to={item.link}
-                style={{
-                  textDecoration: 'none',
-                  color: 'inherit',
-                }}
-              >
-                <SideBox
-                  name={item.name}
-                  height={150}
-                  variant='body1'
-                />
-              </Link>
-            ))}
-          </Stack>
-        )}
-      </Box>
-
-      {isMobile && (
-        <Stack spacing={2}>
-          {sideBar.map((item, index) => (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            flexWrap: isMobile ? 'wrap' : 'nowrap',
+            gap: 2,
+            mt: 3,
+          }}
+        >
+          {links.map((link, index) => (
             <Link
               key={index}
-              to={item.link}
-              style={{
-                textDecoration: 'none',
-                color: 'inherit',
-              }}
+              to={link.link}
+              style={{ textDecoration: 'none', color: 'inherit' }}
             >
-              <SideBox
-                name={item.name}
-                height={100}
-                variant='h6'
-              />
+              <LinkBox name={link.name} height={100} variant='body1' />
             </Link>
           ))}
-        </Stack>
-      )}
-    </Box>
-  );
+        </Box>
+      </Box>
+    )}
+  </Box>
+  )
 };

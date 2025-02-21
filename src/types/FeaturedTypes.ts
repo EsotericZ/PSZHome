@@ -1,18 +1,26 @@
 interface FeaturedProps {
   id: string;
-  order: number;
   description: string;
-  colorDom?: string;
-  colorSat?: string;
-  esrb?: string;
-  gameId: number;
-  image: string;
-  metacritic?: string;
+  order: number;
   name: string;
-  rating?: number;
-  ratingTop?: number;
+  cover: string;
+  esrb?: string;
+  igdbRating?: number;
   released: string;
   slug?: string;
+  genres?: { id: number; name: string }[];
+  storyline?: string;
+  summary?: string;
+  gameId: string;
+  totalRating: number;
+  ratingCount: number;
+  gotyCount: number;
+  pszRating?: number;
+  review?: string;
+  video?: string;
+  collection: boolean;
+  wishlist: boolean;
+  backlog: boolean;
 }
 
 export default FeaturedProps;

@@ -1,16 +1,17 @@
 import { Box, Typography } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 
-interface SideBoxProps {
+interface LinkBoxProps {
   name: string;
   height: number;
   variant: Variant;
 }
 
-const SideBox = ({name, height, variant}: SideBoxProps) => {
+const LinkBox = ({name, height, variant}: LinkBoxProps) => {
   return (
     <Box
       sx={{
+        width: '125px',
         height: `${height}px`,
         background: `linear-gradient(135deg, #28242F 0%, #4A0D66 50%, #7A3E7A 100%)`,
         display: 'flex',
@@ -34,4 +35,4 @@ const SideBox = ({name, height, variant}: SideBoxProps) => {
   );
 }
 
-export default SideBox;
+export default LinkBox;
