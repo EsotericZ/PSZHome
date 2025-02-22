@@ -6,8 +6,8 @@ import FeaturedProps from '../../types/FeaturedTypes';
 
 interface FeaturedCardProps {
   game: FeaturedProps;
-  updateWishlist: (gameId: string, inWishlist: boolean) => void;
-  updateBacklog: (gameId: string, inBacklog: boolean) => void;
+  updateWishlist: (igdbId: number) => void;
+  updateBacklog: (igdbId: number) => void;
   openModal: (game: FeaturedProps) => void;
 }
 
@@ -21,6 +21,7 @@ const getGlowColor = (rating?: number) => {
 
 const FeaturedCard: FC<FeaturedCardProps> = ({ game, updateWishlist, updateBacklog, openModal }) => {
   const userScore = game.ratingCount > 0 ? (game.totalRating / game.ratingCount).toFixed(1) : 'N/A';
+  console.log(game)
 
   return (
     <Card
@@ -77,13 +78,13 @@ const FeaturedCard: FC<FeaturedCardProps> = ({ game, updateWishlist, updateBackl
         ) : (
           <>
             <Tooltip title={game.wishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}>
-              <IconButton onClick={() => updateWishlist(game.gameId, game.wishlist)} color='error'>
+              <IconButton onClick={() => updateWishlist(game.igdbId)} color='error'>
                 {game.wishlist ? <Favorite /> : <FavoriteBorder />}
               </IconButton>
             </Tooltip>
 
             <Tooltip title={game.backlog ? 'Remove from Backlog' : 'Add to Backlog'}>
-              <IconButton onClick={() => updateBacklog(game.gameId, game.backlog)} color='info'>
+              <IconButton onClick={() => updateBacklog(game.igdbId)} color='info'>
                 {game.backlog ? <WatchLater /> : <QueryBuilder />}
               </IconButton>
             </Tooltip>

@@ -42,12 +42,12 @@ function Index() {
     },
   ];
 
-  const updateWishlist = () => {
-    console.log('hit wish')
+  const updateWishlist = (igdbId: number) => {
+    console.log(`Wishlist Clicked: ${igdbId}`);
   };
 
-  const updateBacklog = () => {
-    console.log('hit back')
+  const updateBacklog = (igdbId: number) => {
+    console.log(`Backlog Clicked: ${igdbId}`);
   };
 
   const openModal = () => {

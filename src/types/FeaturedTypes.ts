@@ -2,6 +2,7 @@ interface FeaturedProps {
   id: string;
   description: string;
   order: number;
+  igdbId: number;
   name: string;
   cover: string;
   esrb?: string;
