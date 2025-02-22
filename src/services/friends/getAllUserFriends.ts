@@ -1,8 +1,8 @@
 import apiPrivate from '../../api/apiPrivate';
 
-const getAllUserFriends = async (AxiosInstance: typeof apiPrivate, id: string) => {
+const getAllUserFriends = async (axiosInstance: typeof apiPrivate, id: string) => {
   try {
-    const response = await AxiosInstance.get(`/friends/${id}`);
+    const response = await axiosInstance.get(`/friends/${id}`);
     return response.data;
   } catch (error) {
     console.error(error);

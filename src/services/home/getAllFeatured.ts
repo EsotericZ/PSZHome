@@ -1,7 +1,6 @@
 import api from '../../api/api';
 
 const getAllFeatured = async (userId?: string) => {
-  console.log(userId)
   try {
     const response = await api.get('/home', { 
       params: userId ? { userId } : {},

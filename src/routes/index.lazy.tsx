@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createLazyFileRoute, Link } from '@tanstack/react-router';
-import { Box, IconButton, useMediaQuery } from '@mui/material';
+import { Box, useMediaQuery } from '@mui/material';
 // import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 
 import { useUserContext } from '../context/UserContext';
@@ -9,8 +9,11 @@ import FeaturedCard from '../components/home/FeaturedCard';
 import FeaturedProps from '../types/FeaturedTypes';
 import LoadSymbol from '../components/shared/LoadSymbol';
 import LinkBox from '../components/home/LinkBox';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 import getAllFeatured from '../services/home/getAllFeatured';
+import updateBacklog from '../services/backlog/updateBacklog';
+import updateWishlist from '../services/wishlist/updateWishlist';
 
 export const Route = createLazyFileRoute('/')({
   component: Index,
@@ -22,6 +25,7 @@ function Index() {
   const [featured, setFeatured] = useState<FeaturedProps[]>([]);
   const carouselRef = useRef<HTMLDivElement>(null);
   const { state } = useUserContext();
+  const apiPrivate = useAxiosPrivate();
 
   const links = [
     {
@@ -42,12 +46,43 @@ function Index() {
     },
   ];
 
-  const updateWishlist = (igdbId: number) => {
+  const toggleWishlist = async (igdbId: number) => {
     console.log(`Wishlist Clicked: ${igdbId}`);
+
+    if (!state.id) {
+      console.error('User ID is null. Cannot update backlog.');
+      return;
+    }
+
+    try { 
+      await updateWishlist(apiPrivate, igdbId, state.id)
+      console.log('done')
+
+      setFeatured((prevFeatured) => {
+        const newState = prevFeatured.map((game) =>
+          game.igdbId === igdbId ? { ...game, wishlist: !game.wishlist } : game
+        );
+        console.log("Updated featured state:", newState);
+        return newState;
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const updateBacklog = (igdbId: number) => {
+  const toggleBacklog = async (igdbId: number) => {
     console.log(`Backlog Clicked: ${igdbId}`);
+
+    if (!state.id) {
+      console.error('User ID is null. Cannot update backlog.');
+      return;
+    }
+
+    try { 
+      await updateBacklog(apiPrivate, igdbId, state.id)
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const openModal = () => {
@@ -117,8 +152,8 @@ function Index() {
       <FeaturedCard
         key={game.id}
         game={game}
-        updateWishlist={updateWishlist}
-        updateBacklog={updateBacklog}
+        toggleWishlist={toggleWishlist}
+        toggleBacklog={toggleBacklog}
         openModal={openModal}
       />
     ))}
