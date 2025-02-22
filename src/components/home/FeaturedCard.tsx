@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { Box, Card, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
-import { Favorite, FavoriteBorder, List, ListAlt } from '@mui/icons-material';
+import { Box, Card, CardContent, CardMedia, IconButton, Tooltip, Typography } from '@mui/material';
+import { Favorite, FavoriteBorder, QueryBuilder, WatchLater } from '@mui/icons-material';
 
 import FeaturedProps from '../../types/FeaturedTypes';
 
@@ -25,11 +25,11 @@ const FeaturedCard: FC<FeaturedCardProps> = ({ game, updateWishlist, updateBackl
   return (
     <Card
       sx={{
-        maxWidth: 600,
+        width: 350,
+        minWidth: 300,
         bgcolor: '#222',
         color: '#fff',
         borderRadius: 2,
-        p: 2,
         mx: 'auto',
         boxShadow: getGlowColor(game.igdbRating),
         transition: 'box-shadow 0.3s ease-in-out',
@@ -69,21 +69,27 @@ const FeaturedCard: FC<FeaturedCardProps> = ({ game, updateWishlist, updateBackl
         </Box>
       </Box>
 
-      {game.collection ? (
-        <Typography variant='body2' color='success.main' fontWeight='bold'>
-          In User Library
-        </Typography>
-      ) : (
-        <Box display='flex' justifyContent='center' gap={2} mt={2}>
-          <IconButton onClick={() => updateWishlist(game.gameId, game.wishlist)} color='error'>
-            {game.wishlist ? <Favorite fontSize='large' /> : <FavoriteBorder fontSize='large' />}
-          </IconButton>
+      <Box display='flex' justifyContent='center' gap={2} mt={2}>
+        {game.collection ? (
+          <Typography variant='body1' color='success.main' fontWeight='bold' fontSize={20}>
+            In User Library
+          </Typography>
+        ) : (
+          <>
+            <Tooltip title={game.wishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}>
+              <IconButton onClick={() => updateWishlist(game.gameId, game.wishlist)} color='error'>
+                {game.wishlist ? <Favorite /> : <FavoriteBorder />}
+              </IconButton>
+            </Tooltip>
 
-          <IconButton onClick={() => updateBacklog(game.gameId, game.backlog)} color='info'>
-            {game.backlog ? <ListAlt fontSize='large' /> : <List fontSize='large' />}
-          </IconButton>
-        </Box>
-      )}
+            <Tooltip title={game.backlog ? 'Remove from Backlog' : 'Add to Backlog'}>
+              <IconButton onClick={() => updateBacklog(game.gameId, game.backlog)} color='info'>
+                {game.backlog ? <WatchLater /> : <QueryBuilder />}
+              </IconButton>
+            </Tooltip>
+          </>
+        )}
+      </Box>
     </CardContent>
   </Card>
   );

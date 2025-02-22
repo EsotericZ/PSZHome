@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createLazyFileRoute, Link } from '@tanstack/react-router';
-import { Box, IconButton, Stack, useMediaQuery } from '@mui/material';
-import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
+import { Box, IconButton, useMediaQuery } from '@mui/material';
+// import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 
 import { useUserContext } from '../context/UserContext';
 
@@ -54,15 +54,35 @@ function Index() {
     console.log('hit open')
   };
 
-  const scrollCarousel = (direction: 'left' | 'right') => {
-    if (carouselRef.current) {
-      const scrollAmount = 300;
-      carouselRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth',
-      });
+  // const scrollCarousel = (direction: 'left' | 'right') => {
+  //   if (!carouselRef.current) return;
+
+  //   const scrollAmount = carouselRef.current.clientWidth * 0.7; 
+  //   const maxScrollLeft = carouselRef.current.scrollWidth - carouselRef.current.clientWidth;
+
+  //   if (direction === 'left') {
+  //     if (carouselRef.current.scrollLeft <= 0) {
+  //       carouselRef.current.scrollLeft = maxScrollLeft;
+  //     } else {
+  //       carouselRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+  //     }
+  //   } else {
+  //     if (carouselRef.current.scrollLeft >= maxScrollLeft) {
+  //       carouselRef.current.scrollLeft = 0;
+  //     } else {
+  //       carouselRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  //     }
+  //   }
+  // };
+
+  useEffect(() => {
+    if (carouselRef.current && featured.length > 0) {
+      const firstItem = carouselRef.current.children[Math.floor(featured.length / 3)] as HTMLElement;
+      if (firstItem) {
+        carouselRef.current.scrollLeft = firstItem.offsetLeft - carouselRef.current.offsetWidth / 2 + firstItem.offsetWidth / 2;
+      }
     }
-  };
+  }, [featured]);
 
   const fetchData = async () => {
     try {
@@ -81,67 +101,46 @@ function Index() {
   }, []);
 
   return (
-    <Box>
-    {loading ? (
-      <LoadSymbol />
-    ) : (
-      <Box sx={{ mt: 5, textAlign: 'center' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-          <IconButton onClick={() => scrollCarousel('left')} sx={{ color: '#fff' }}>
-            <ArrowBackIos />
-          </IconButton>
-
-          <Box
-            ref={carouselRef}
-            sx={{
-              display: 'flex',
-              gap: 3,
-              overflowX: 'auto',
-              scrollBehavior: 'smooth',
-              whiteSpace: 'nowrap',
-              px: 1,
-              pb: 2,
-              maxWidth: '85vw',
-              overflow: 'visible'
-            }}
-          >
-            {featured.map((game) => (
-              <FeaturedCard
-                key={game.id}
-                game={game}
-                updateWishlist={() => {}}
-                updateBacklog={() => {}}
-                openModal={() => {}}
-              />
-            ))}
-          </Box>
-
-          <IconButton onClick={() => scrollCarousel('right')} sx={{ color: '#fff' }}>
-            <ArrowForwardIos />
-          </IconButton>
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexWrap: isMobile ? 'wrap' : 'nowrap',
-            gap: 2,
-            mt: 3,
-          }}
-        >
-          {links.map((link, index) => (
-            <Link
-              key={index}
-              to={link.link}
-              style={{ textDecoration: 'none', color: 'inherit' }}
-            >
-              <LinkBox name={link.name} height={100} variant='body1' />
-            </Link>
-          ))}
-        </Box>
-      </Box>
-    )}
+<Box sx={{ textAlign: 'center', width: '100%', mt: 5 }}>
+  {loading ? (
+    <LoadSymbol />
+  ) : (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        flexWrap: isMobile ? 'wrap' : 'nowrap',
+        gap: 5,
+      }}
+    >
+    {featured.map((game) => (
+      <FeaturedCard
+        key={game.id}
+        game={game}
+        updateWishlist={updateWishlist}
+        updateBacklog={updateBacklog}
+        openModal={openModal}
+      />
+    ))}
   </Box>
-  )
-};
+  )}
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      flexWrap: isMobile ? 'wrap' : 'nowrap',
+      gap: 2,
+      mt: 3,
+    }}
+  >
+    {links.map((link, index) => (
+      <Link key={index} to={link.link} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <LinkBox name={link.name} height={100} variant='body1' />
+      </Link>
+    ))}
+  </Box>
+</Box>
+
+
+  );
+}

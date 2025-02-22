@@ -30,7 +30,7 @@ function RootComponent() {
           alignItems: 'center',
           justifyContent: 'center',
           flexGrow: 1,
-          maxWidth: '1400px',
+          maxWidth: '100%',
           width: '100%',
           mx: 'auto', 
           px: isMobile ? 2 : 4, 
