@@ -5,43 +5,78 @@ import { useUserContext } from '../../context/UserContext';
 
 import LoadSymbol from '../shared/LoadSymbol';
 import SearchBar from '../shared/SearchBar';
-import UpdatePSNButton from '../profile/UpdatePSNButton';
+import WishlistProps from '../../types/WishlistTypes';
+import WishlistCard from './WishlistCard';
 
+import getUserWishlist from '../../services/wishlist/getUserWishlist';
+import updateBacklog from '../../services/backlog/updateBacklog';
+import updateWishlist from '../../services/wishlist/updateWishlist';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const Wishlist: FC = () => {
+  const [wishlist, setWishlist] = useState<WishlistProps[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const { state } = useUserContext();
   const apiPrivate = useAxiosPrivate();
   const isMobile = useMediaQuery('(max-width:600px)');
 
-  // const filteredGames = gamesList.filter((game) =>
-  //   game.username.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+  const filteredGames = wishlist.filter((game) =>
+    game.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  // const fetchData = async (): Promise<{ psnAvatar?: string | null; psnPlus?: boolean }> => {
-  //   if (!state.id) {
-  //     console.warn('UserID Not Available');
-  //     return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
-  //   }
+  const toggleWishlist = async (igdbId: number) => {
+    if (!state.id) {
+      console.error('User ID is null. Cannot update backlog.');
+      return;
+    }
+    try { 
+      await updateWishlist(apiPrivate, igdbId, state.id)
+    } catch (error) {
+      console.error(error);
+    } finally {
+      fetchData();
+    }
+  };
 
-  //   try {
-  //     const friendData = await getAllUserFriends(apiPrivate, state.id);
-  //     setFriendList(friendData);
+  const toggleBacklog = async (igdbId: number) => {
+    console.log(`Backlog Clicked: ${igdbId}`);
 
-  //     return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
-  //   } catch (error) {
-  //     console.error(error);
-  //     return { psnAvatar: state.psnAvatar, psnPlus: state.psnPlus };
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
+    if (!state.id) {
+      console.error('User ID is null. Cannot update backlog.');
+      return;
+    }
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+    try { 
+      await updateBacklog(apiPrivate, igdbId, state.id)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const openModal = () => {
+    console.log('hit open')
+  };
+
+  const fetchData = async () => {
+    if (!state.id) {
+      console.warn('UserID Not Available');
+      return;
+    }
+
+    try {
+      const wishlistData = await getUserWishlist(apiPrivate, state.id);
+      setWishlist(wishlistData);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     state.verified ? (
@@ -67,29 +102,27 @@ const Wishlist: FC = () => {
                 onChange={setSearchTerm} 
                 placeholder='Search Games...'
               />
-              <Box sx={{ mt: isMobile ? 0 : 2 }}>
-                <UpdatePSNButton
-                  userId={state.id}
-                  // fetchData={fetchData}
-                />
-              </Box>
             </Box>
             <Box
               sx={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: 2,
-                justifyContent: 'center',
-                alignItems: 'center',
-                maxWidth: '1000px',
-                margin: '0 auto',
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 5,
+                justifyContent: "center",
+                alignItems: "stretch",
+                maxWidth: "100%",
+                margin: "0 auto",
               }}
             >
-              {/* {filteredFriends.map((friend, index) => (
-                <Box key={index} sx={{ flex: '1 1 275px', maxWidth: '300px' }}>
-                  <FriendCard friend={friend} />
-                </Box>
-              ))} */}
+              {filteredGames.map((game, index) => (
+                <WishlistCard
+                  key={index}
+                  game={game}
+                  toggleWishlist={toggleWishlist}
+                  toggleBacklog={toggleBacklog}
+                  openModal={openModal}
+                />
+              ))}
             </Box>
           </>
         )}

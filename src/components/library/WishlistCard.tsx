@@ -1,14 +1,14 @@
 import { FC } from 'react';
-import { Avatar, Box, Card, CardContent, CardMedia, IconButton, Tooltip, Typography } from '@mui/material';
+import { Box, Card, CardContent, CardMedia, IconButton, Tooltip, Typography } from '@mui/material';
 import { Favorite, FavoriteBorder, QueryBuilder, WatchLater } from '@mui/icons-material';
 
-import FeaturedProps from '../../types/FeaturedTypes';
+import WishlistProps from '../../types/WishlistTypes';
 
-interface FeaturedCardProps {
-  game: FeaturedProps;
+interface WishlistCardProps {
+  game: WishlistProps;
   toggleWishlist: (igdbId: number) => void;
   toggleBacklog: (igdbId: number) => void;
-  openModal: (game: FeaturedProps) => void;
+  openModal: (game: WishlistProps) => void;
 }
 
 const getGlowColor = (rating?: number) => {
@@ -19,27 +19,14 @@ const getGlowColor = (rating?: number) => {
   return '0 0 15px #8C7853';
 };
 
-import bronzeTrophyIcon from '../../../assets/trophies/bronze.png';
-import goldTrophyIcon from '../../../assets/trophies/gold.png';
-import platinumTrophyIcon from '../../../assets/trophies/platinum.png';
-import silverTrophyIcon from '../../../assets/trophies/silver.png';
-
-const TrophyIcon = {
-  bronze: bronzeTrophyIcon,
-  silver: silverTrophyIcon,
-  gold: goldTrophyIcon,
-  platinum: platinumTrophyIcon,
-};
-
-const FeaturedCard: FC<FeaturedCardProps> = ({ game, toggleWishlist, toggleBacklog, openModal }) => {
+const WishlistCard: FC<WishlistCardProps> = ({ game, toggleWishlist, toggleBacklog, openModal }) => {
   const userScore = game.ratingCount > 0 ? (game.totalRating / game.ratingCount).toFixed(1) : 'N/A';
-  console.log(game)
 
   return (
     <Card
       sx={{
-        width: 350,
-        minWidth: 300,
+        width: { xs: "100%", sm: "48%", md: "31%", lg: "300px" },
+        minWidth: { xs: "200px", sm: "200px", md: "200px", lg: "225px" },
         bgcolor: '#222',
         color: '#fff',
         borderRadius: 2,
@@ -73,9 +60,6 @@ const FeaturedCard: FC<FeaturedCardProps> = ({ game, toggleWishlist, toggleBackl
             {game.pszRating ? game.pszRating.toFixed(1) : 'N/A'}
           </Typography>
         </Box>
-        <Avatar src={TrophyIcon['gold']} sx={{ width: 20, height: 20 }} />
-        <Avatar src={TrophyIcon['gold']} sx={{ width: 36, height: 36, px: 0 }} />
-        <Avatar src={TrophyIcon['gold']} sx={{ width: 20, height: 20 }} />
         <Box>
           <Typography variant='body2' color='gray'>User Score</Typography>
           <Typography variant='body1' fontWeight='bold'>{userScore}</Typography>
@@ -86,29 +70,21 @@ const FeaturedCard: FC<FeaturedCardProps> = ({ game, toggleWishlist, toggleBackl
       </Box>
 
       <Box display='flex' justifyContent='center' gap={2} mt={2}>
-        {game.collection ? (
-          <Typography variant='body1' color='success.main' fontWeight='bold' fontSize={20}>
-            In User Library
-          </Typography>
-        ) : (
-          <>
-            <Tooltip title={game.wishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}>
-              <IconButton onClick={() => toggleWishlist(game.igdbId)} color='error'>
-                {game.wishlist ? <Favorite /> : <FavoriteBorder />}
-              </IconButton>
-            </Tooltip>
+        <Tooltip title={'Remove from Wishlist'}>
+          <IconButton onClick={() => toggleWishlist(game.igdbId)} color='error'>
+            <Favorite />
+          </IconButton>
+        </Tooltip>
 
-            <Tooltip title={game.backlog ? 'Remove from Backlog' : 'Add to Backlog'}>
-              <IconButton onClick={() => toggleBacklog(game.igdbId)} color='info'>
-                {game.backlog ? <WatchLater /> : <QueryBuilder />}
-              </IconButton>
-            </Tooltip>
-          </>
-        )}
+        <Tooltip title={game.backlog ? 'Remove from Backlog' : 'Add to Backlog'}>
+          <IconButton onClick={() => toggleBacklog(game.igdbId)} color='info'>
+            {game.backlog ? <WatchLater /> : <QueryBuilder />}
+          </IconButton>
+        </Tooltip>
       </Box>
     </CardContent>
   </Card>
   );
 };
 
-export default FeaturedCard;
+export default WishlistCard;

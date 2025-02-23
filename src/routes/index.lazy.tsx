@@ -47,8 +47,6 @@ function Index() {
   ];
 
   const toggleWishlist = async (igdbId: number) => {
-    console.log(`Wishlist Clicked: ${igdbId}`);
-
     if (!state.id) {
       console.error('User ID is null. Cannot update backlog.');
       return;
@@ -56,13 +54,11 @@ function Index() {
 
     try { 
       await updateWishlist(apiPrivate, igdbId, state.id)
-      console.log('done')
 
       setFeatured((prevFeatured) => {
         const newState = prevFeatured.map((game) =>
           game.igdbId === igdbId ? { ...game, wishlist: !game.wishlist } : game
         );
-        console.log("Updated featured state:", newState);
         return newState;
       });
     } catch (error) {
@@ -165,7 +161,7 @@ function Index() {
       justifyContent: 'center',
       flexWrap: isMobile ? 'wrap' : 'nowrap',
       gap: 2,
-      mt: 3,
+      mt: 5,
     }}
   >
     {links.map((link, index) => (
